@@ -1,0 +1,3166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <!-- REMOVIDO user-scalable=no e maximum-scale=1.0 para permitir zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Dupla Gourmet - Controle de Confeitaria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rosa': '#F7C6D9',
+                        'nude': '#EAD8C1',
+                        'marrom': '#6B4226'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        /* Variáveis CSS para cores */
+        :root {
+            --bg-body: #f9fafb; /* bg-gray-50 */
+            --bg-header: #6B4226; /* marrom */
+            --text-header: #ffffff;
+            --text-header-light: #ffffffd9; /* white/90 */
+            --bg-card: #ffffff;
+            --text-primary: #6B4226; /* marrom */
+            --text-secondary: #4b5563; /* gray-600 */
+            --text-light: #9ca3af; /* gray-400 */
+            --border-color: #e5e7eb; /* gray-200 */
+            --input-border: #d1d5db; /* gray-300 */
+            --input-focus-ring: #F7C6D9; /* rosa */
+            --bg-modal: #ffffff;
+            --bg-info-block: #f3f4f6; /* gray-50 */
+            --bg-green-light: #dcfce7; /* green-50 */
+            --text-green-dark: #166534; /* green-800 */
+            --text-green-medium: #22c55e; /* green-600 */
+            --bg-red-light: #fee2e2; /* red-50 */
+            --text-red-dark: #991b1b; /* red-800 */
+            --text-red-medium: #ef4444; /* red-500 */
+            --bg-yellow-light: #fffbeb; /* yellow-100 */
+            --text-yellow-dark: #92400e; /* yellow-800 */
+            --text-yellow-medium: #f59e0b; /* yellow-600 */
+            --bg-blue-light: #eff6ff; /* blue-50 */
+            --text-blue-medium: #2563eb; /* blue-600 */
+            --bg-gray-light: #f3f4f6; /* gray-100 */
+            --text-gray-dark: #1f2937; /* gray-900 */
+            --text-gray-medium: #6b7280; /* gray-600 */
+        }
+
+        /* Modo Escuro */
+        body.dark-mode {
+            --bg-body: #1a202c; /* Dark background */
+            --bg-header: #2d3748; /* Darker header */
+            --text-header: #e2e8f0;
+            --text-header-light: #a0aec0;
+            --bg-card: #2d3748; /* Dark card background */
+            --text-primary: #e2e8f0; /* Light text for dark mode */
+            --text-secondary: #a0aec0; /* Lighter gray for dark mode */
+            --text-light: #718096;
+            --border-color: #4a5568;
+            --input-border: #4a5568;
+            --input-focus-ring: #F7C6D9; /* Keep original accent color */
+            --bg-modal: #2d3748;
+            --bg-info-block: #4a5568;
+            --bg-green-light: #1a472a; /* Darker green for alerts */
+            --text-green-dark: #68d391;
+            --text-green-medium: #48bb78;
+            --bg-red-light: #4a1c1c; /* Darker red for alerts */
+            --text-red-dark: #fc8181;
+            --text-red-medium: #e53e3e;
+            --bg-yellow-light: #4a320a; /* Darker yellow for alerts */
+            --text-yellow-dark: #f6e05e;
+            --text-yellow-medium: #ecc94b;
+            --bg-blue-light: #1c3d5a;
+            --text-blue-medium: #63b3ed;
+            --bg-gray-light: #4a5568;
+            --text-gray-dark: #e2e8f0;
+            --text-gray-medium: #a0aec0;
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-secondary); /* Default text color */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Apply variables to elements */
+        .bg-gray-50 { background-color: var(--bg-body); }
+        .bg-marrom { background-color: var(--bg-header); }
+        .text-white { color: var(--text-header); }
+        .text-white\/90 { color: var(--text-header-light); }
+        .bg-white { background-color: var(--bg-card); }
+        .text-marrom { color: var(--text-primary); }
+        .text-gray-600 { color: var(--text-secondary); }
+        .text-gray-500 { color: var(--text-light); }
+        .border-gray-200 { border-color: var(--border-color); }
+        .border-gray-300 { border-color: var(--input-border); }
+        .focus\:ring-rosa:focus { --tw-ring-color: var(--input-focus-ring); }
+        .bg-gray-50 { background-color: var(--bg-info-block); }
+        .bg-green-50 { background-color: var(--bg-green-light); }
+        .text-green-800 { color: var(--text-green-dark); }
+        .text-green-600 { color: var(--text-green-medium); }
+        .bg-red-50 { background-color: var(--bg-red-light); }
+        .text-red-800 { color: var(--text-red-dark); }
+        .text-red-500 { color: var(--text-red-medium); }
+        .bg-yellow-100 { background-color: var(--bg-yellow-light); }
+        .text-yellow-800 { color: var(--text-yellow-dark); }
+        .text-yellow-600 { color: var(--text-yellow-medium); }
+        .bg-blue-50 { background-color: var(--bg-blue-light); }
+        .text-blue-800 { color: var(--text-blue-medium); } /* Added for blue-800 */
+        .text-blue-600 { color: var(--text-blue-medium); }
+        .bg-gray-100 { background-color: var(--bg-gray-light); }
+        .text-gray-700 { color: var(--text-gray-medium); }
+        .text-gray-900 { color: var(--text-gray-dark); }
+
+        /* Specific adjustments for dark mode */
+        body.dark-mode .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Darker shadow */
+        }
+        body.dark-mode .nav-btn-mobile {
+            color: var(--text-primary); /* Ensure mobile nav text is visible */
+        }
+        body.dark-mode .nav-btn-mobile.text-marrom {
+            color: var(--text-primary); /* Ensure active mobile nav text is visible */
+        }
+        body.dark-mode .finance-tab.text-marrom {
+            color: var(--text-primary);
+            border-color: var(--text-primary);
+        }
+        body.dark-mode .categoria-btn.bg-marrom {
+            background-color: var(--text-primary);
+            color: var(--bg-card);
+        }
+        body.dark-mode .categoria-btn.bg-gray-100 {
+            background-color: var(--bg-info-block);
+            color: var(--text-secondary);
+        }
+        body.dark-mode .categoria-btn.bg-gray-100:hover {
+            background-color: var(--border-color);
+        }
+        body.dark-mode .bg-nude {
+            background-color: var(--bg-info-block); /* Adjust nude for dark mode */
+            color: var(--text-primary);
+        }
+        body.dark-mode .bg-nude:hover {
+            background-color: var(--border-color);
+        }
+        body.dark-mode .bg-rosa {
+            background-color: var(--bg-info-block); /* Adjust rosa for dark mode */
+            color: var(--text-primary);
+        }
+        body.dark-mode .bg-rosa:hover {
+            background-color: var(--border-color);
+        }
+        body.dark-mode .bg-green-600 {
+            background-color: var(--text-green-medium);
+            color: var(--text-header);
+        }
+        body.dark-mode .bg-green-600:hover {
+            background-color: var(--text-green-dark);
+        }
+        body.dark-mode .bg-red-600 {
+            background-color: var(--text-red-medium);
+            color: var(--text-header);
+        }
+        body.dark-mode .bg-red-600:hover {
+            background-color: var(--text-red-dark);
+        }
+        body.dark-mode .bg-blue-600 {
+            background-color: var(--text-blue-medium);
+            color: var(--text-header);
+        }
+        body.dark-mode .bg-blue-600:hover {
+            background-color: var(--text-blue-medium);
+        }
+        body.dark-mode .bg-gray-200 {
+            background-color: var(--bg-info-block);
+            color: var(--text-secondary);
+        }
+        body.dark-mode .bg-gray-200:hover {
+            background-color: var(--border-color);
+        }
+        body.dark-mode .text-gray-400 {
+            color: var(--text-light);
+        }
+        body.dark-mode .text-gray-800 {
+            color: var(--text-header);
+        }
+        body.dark-mode .text-gray-600 {
+            color: var(--text-secondary);
+        }
+        body.dark-mode .text-gray-500 {
+            color: var(--text-light);
+        }
+        body.dark-mode .text-gray-700 {
+            color: var(--text-gray-medium);
+        }
+        body.dark-mode .text-gray-900 {
+            color: var(--text-gray-dark);
+        }
+        body.dark-mode .text-blue-600 {
+            color: var(--text-blue-medium);
+        }
+        body.dark-mode .text-green-600 {
+            color: var(--text-green-medium);
+        }
+        body.dark-mode .text-red-500 {
+            color: var(--text-red-medium);
+        }
+        body.dark-mode .text-yellow-600 {
+            color: var(--text-yellow-medium);
+        }
+        body.dark-mode .text-marrom {
+            color: var(--text-primary);
+        }
+        body.dark-mode .text-white {
+            color: var(--text-header);
+        }
+        body.dark-mode .text-white\/90 {
+            color: var(--text-header-light);
+        }
+        body.dark-mode .hover\:text-white\/80:hover {
+            color: var(--text-header-light);
+        }
+        body.dark-mode .hover\:text-gray-700:hover {
+            color: var(--text-gray-dark);
+        }
+        body.dark-mode .hover\:text-gray-800:hover {
+            color: var(--text-header);
+        }
+        body.dark-mode .hover\:bg-marrom\/90:hover {
+            background-color: var(--text-primary);
+        }
+        body.dark-mode .hover\:bg-nude\/80:hover {
+            background-color: var(--border-color);
+        }
+        body.dark-mode .hover\:bg-gray-300:hover {
+            background-color: var(--border-color);
+        }
+        body.dark-mode .hover\:bg-green-700:hover {
+            background-color: var(--text-green-dark);
+        }
+        body.dark-mode .hover\:bg-red-700:hover {
+            background-color: var(--text-red-dark);
+        }
+        body.dark-mode .hover\:bg-blue-700:hover {
+            background-color: var(--text-blue-medium);
+        }
+        body.dark-mode .hover\:text-blue-800:hover {
+            color: var(--text-blue-medium);
+        }
+        body.dark-mode .hover\:text-green-800:hover {
+            color: var(--text-green-dark);
+        }
+        body.dark-mode .hover\:text-red-800:hover {
+            color: var(--text-red-dark);
+        }
+        body.dark-mode .hover\:text-gray-600:hover {
+            color: var(--text-secondary);
+        }
+        body.dark-mode .hover\:text-gray-800:hover {
+            color: var(--text-header);
+        }
+        body.dark-mode .bg-black {
+            background-color: rgba(0, 0, 0, 0.7); /* Darker overlay */
+        }
+        body.dark-mode .bg-black.bg-opacity-50 {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        body.dark-mode .bg-rosa {
+            background-color: var(--bg-info-block);
+        }
+        body.dark-mode .bg-nude {
+            background-color: var(--bg-info-block);
+        }
+        body.dark-mode .bg-marrom {
+            background-color: var(--bg-header);
+        }
+        body.dark-mode .card-border-rosa { border-top-color: #F7C6D9; } /* Mantendo cores originais para bordas de card */
+        body.dark-mode .card-border-nude { border-top-color: #EAD8C1; }
+        body.dark-mode .card-border-marrom { border-top-color: #6B4226; }
+        body.dark-mode .card-border-green { border-top-color: #10B981; }
+        body.dark-mode .card-border-yellow { border-top-color: #F59E0B; }
+        body.dark-mode .card-border-red { border-top-color: #EF4444; }
+
+
+        /* Permitir seleção de texto apenas em inputs e textareas (MANTIDO) */
+        input, textarea, select {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+            background-color: var(--bg-card); /* Ensure inputs match card background */
+            color: var(--text-secondary); /* Ensure input text is visible */
+        }
+        
+        /* Melhorias de toque (MANTIDO) */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        .gradient-bg { background: linear-gradient(135deg, #F7C6D9 0%, #EAD8C1 100%); }
+        .card-shadow { box-shadow: 0 4px 20px rgba(107, 66, 38, 0.1); }
+        .hover-lift { transition: transform 0.2s ease; }
+        .hover-lift:hover { transform: translateY(-2px); }
+        
+        /* Bordas coloridas para os cards */
+        .card-border-rosa { border-top: 4px solid #F7C6D9; }
+        .card-border-nude { border-top: 4px solid #EAD8C1; }
+        .card-border-marrom { border-top: 4px solid #6B4226; }
+        .card-border-green { border-top: 4px solid #10B981; }
+        .card-border-yellow { border-top: 4px solid #F59E0B; }
+        .card-border-red { border-top: 4px solid #EF4444; }
+        
+        /* Melhorias para dispositivos móveis (mais agressivas) */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px; /* Reduz o tamanho da fonte base */
+            }
+            h1 {
+                font-size: 1.75rem; /* text-3xl para 2xl */
+            }
+            h2 {
+                font-size: 1.5rem; /* text-3xl para 2xl */
+            }
+            h3 {
+                font-size: 1.125rem; /* text-xl para lg */
+            }
+            .text-2xl {
+                font-size: 1.5rem; /* Reduz o tamanho de texto 2xl */
+            }
+            .text-xl {
+                font-size: 1.125rem; /* Reduz o tamanho de texto xl */
+            }
+            .text-lg {
+                font-size: 1rem; /* Reduz o tamanho de texto lg */
+            }
+            .text-sm {
+                font-size: 0.75rem; /* Reduz o tamanho de texto sm para xs */
+            }
+            .text-xs {
+                font-size: 0.625rem; /* Reduz o tamanho de texto xs para xxs */
+            }
+
+            .modal {
+                padding: 4px !important; /* Reduz o padding externo do modal */
+            }
+            .modal > div {
+                max-height: 98vh !important; /* Ocupa mais altura da tela */
+                width: 98% !important; /* Ocupa mais largura da tela */
+                margin: 0 auto !important; /* Centraliza e remove margens laterais */
+            }
+            .modal .p-6 { /* Ajusta o padding interno dos modais */
+                padding: 12px !important; /* Equivalente a p-3 */
+            }
+            .modal .p-4 { /* Ajusta o padding interno dos modais */
+                padding: 8px !important; /* Equivalente a p-2 */
+            }
+            #detalhes-imagem {
+                max-height: 150px !important; /* Reduz a altura máxima da imagem de detalhes */
+            }
+            .grid.gap-6 { /* Reduz o gap em grids */
+                gap: 12px !important; /* Equivalente a gap-3 */
+            }
+            .grid.gap-4 { /* Reduz o gap em grids menores */
+                gap: 8px !important; /* Equivalente a gap-2 */
+            }
+            .py-8 { /* Reduz o padding vertical principal */
+                padding-top: 16px !important;
+                padding-bottom: 16px !important;
+            }
+            .mb-8 { /* Reduz margens inferiores de seções */
+                margin-bottom: 16px !important;
+            }
+            .p-6.card-shadow { /* Reduz padding de cards */
+                padding: 12px !important; /* Equivalente a p-3 */
+            }
+            .py-6 { /* Reduz padding vertical do header */
+                padding-top: 16px !important;
+                padding-bottom: 16px !important;
+            }
+            .py-3 { /* Reduz padding vertical do menu mobile */
+                padding-top: 8px !important;
+                padding-bottom: 8px !important;
+            }
+            .px-6 { /* Reduz padding horizontal de botões */
+                padding-left: 16px !important;
+                padding-right: 16px !important;
+            }
+            .py-3 { /* Reduz padding vertical de botões */
+                padding-top: 8px !important;
+                padding-bottom: 8px !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-marrom shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-nude rounded-full flex items-center justify-center">
+                        <span class="text-marrom font-bold text-xl">DG</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">Dupla Gourmet</h1>
+                        <p class="text-white/90 text-sm">Controle de Confeitaria</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <button onclick="showSection('dashboard')" class="nav-btn text-white hover:text-white/80 font-medium">Dashboard</button>
+                    <button onclick="showSection('pedidos')" class="nav-btn text-white hover:text-white/80 font-medium">Pedidos</button>
+                    <button onclick="showSection('financeiro')" class="nav-btn text-white hover:text-white/80 font-medium">Financeiro</button>
+                    <button onclick="showSection('estoque')" class="nav-btn text-white hover:text-white/80 font-medium">Estoque</button>
+                    <!-- Botão de Modo Escuro -->
+                    <button id="darkModeToggle" class="text-white hover:text-white/80 p-2 rounded-full transition-colors duration-200" title="Alternar Modo Escuro">
+                        <!-- Ícone de Sol (padrão) -->
+                        <svg id="sunIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h1M3 12h1m15.325-7.757l-.707.707M5.382 18.618l-.707.707M18.618 5.382l-.707-.707M5.382 5.382l-.707-.707M12 18a6 6 0 100-12 6 6 0 000 12z"></path>
+                        </svg>
+                        <!-- Ícone de Lua (escondido por padrão) -->
+                        <svg id="moonIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="md:hidden bg-white shadow-sm">
+        <div class="flex justify-around py-3">
+            <button onclick="showSection('dashboard')" class="nav-btn-mobile flex flex-col items-center text-marrom">
+                <span class="text-xs">Dashboard</span>
+            </button>
+            <button onclick="showSection('pedidos')" class="nav-btn-mobile flex flex-col items-center text-marrom">
+                <span class="text-xs">Pedidos</span>
+            </button>
+            <button onclick="showSection('financeiro')" class="nav-btn-mobile flex flex-col items-center text-marrom">
+                <span class="text-xs">Financeiro</span>
+            </button>
+            <button onclick="showSection('estoque')" class="nav-btn-mobile flex flex-col items-center text-marrom">
+                <span class="text-xs">Estoque</span>
+            </button>
+            <!-- Botão de Modo Escuro para Mobile -->
+            <button id="darkModeToggleMobile" class="nav-btn-mobile flex flex-col items-center text-marrom" title="Alternar Modo Escuro">
+                <svg id="sunIconMobile" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h1M3 12h1m15.325-7.757l-.707.707M5.382 18.618l-.707.707M18.618 5.382l-.707-.707M5.382 5.382l-.707-.707M12 18a6 6 0 100-12 6 6 0 000 12z"></path>
+                </svg>
+                <svg id="moonIconMobile" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+                <span class="text-xs">Tema</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-marrom mb-2">Dashboard</h2>
+                <p class="text-gray-600">Visão geral do seu negócio</p>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 card-shadow hover-lift card-border-marrom">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Pedidos do Mês</p>
+                            <p class="text-2xl font-bold text-marrom" id="pedidos-mes">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-rosa rounded-full flex items-center justify-center">
+                            <span class="text-marrom text-xl">📋</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow hover-lift card-border-green">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Receita Mensal</p>
+                            <p class="text-2xl font-bold text-green-600" id="receita-mes">R$ 0,00</p>
+                        </div>
+                        <div class="w-12 h-12 bg-nude rounded-full flex items-center justify-center">
+                            <span class="text-marrom text-xl">💰</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow hover-lift card-border-red">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Despesas de Estoque</p>
+                            <p class="text-2xl font-bold text-red-500" id="despesas-mes">R$ 0,00</p>
+                        </div>
+                        <div class="w-12 h-12 bg-rosa rounded-full flex items-center justify-center">
+                            <span class="text-marrom text-xl">📊</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow hover-lift card-border-nude">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Lucro Líquido</p>
+                            <p class="text-2xl font-bold text-green-600" id="lucro-mes">R$ 0,00</p>
+                        </div>
+                        <div class="w-12 h-12 bg-nude rounded-full flex items-center justify-center">
+                            <span class="text-marrom text-xl">📈</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts and Recent Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl p-6 card-shadow card-border-rosa">
+                    <h3 class="text-xl font-semibold text-marrom mb-4">Vendas dos Últimos 7 Dias</h3>
+                    <div class="space-y-3" id="vendas-7-dias">
+                        <div class="text-center py-8">
+                            <p class="text-gray-500">Nenhuma venda registrada</p>
+                            <p class="text-gray-400 text-sm">As vendas aparecerão aqui quando os pedidos forem entregues</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow card-border-marrom">
+                    <h3 class="text-xl font-semibold text-marrom mb-4">Alertas de Estoque</h3>
+                    <div class="space-y-4" id="alertas-estoque">
+                        <!-- Alertas serão gerados dinamicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pedidos Section -->
+        <div id="pedidos" class="section hidden">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-marrom mb-2">Gestão de Pedidos</h2>
+                    <p class="text-gray-600">Controle todos os seus pedidos</p>
+                </div>
+                <button onclick="showModal('novo-pedido')" class="bg-marrom text-white px-6 py-3 rounded-lg hover:bg-marrom/90 transition-colors font-medium">
+                    + Novo Pedido
+                </button>
+            </div>
+
+            <!-- Filtros -->
+            <div class="bg-white rounded-xl p-6 card-shadow mb-6 card-border-nude">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <select class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        <option>Todos os Status</option>
+                        <option>Em Produção</option>
+                        <option>Entregue</option>
+                        <option>Cancelado</option>
+                    </select>
+                    <input type="date" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                    <input type="text" placeholder="Buscar cliente..." class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                    <button class="bg-nude text-marrom px-4 py-2 rounded-lg hover:bg-nude/80 transition-colors">Filtrar</button>
+                </div>
+            </div>
+
+            <!-- Cards de Pedidos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="pedidos-container">
+                <!-- Cards serão gerados dinamicamente pelo JavaScript -->
+            </div>
+        </div>
+
+        <!-- Financeiro Section -->
+        <div id="financeiro" class="section hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-marrom mb-2">Controle Financeiro</h2>
+                <p class="text-gray-600">Gerencie receitas e despesas</p>
+            </div>
+
+            <!-- Resumo Financeiro -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 card-shadow card-border-green">
+                    <h3 class="text-lg font-semibold text-marrom mb-4">Receitas do Mês</h3>
+                    <p class="text-3xl font-bold text-green-600" id="receita-mes-financeiro">R$ 0,00</p>
+                    <p class="text-sm text-gray-500 mt-2">Baseado em pedidos entregues</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 card-shadow card-border-red">
+                    <h3 class="text-lg font-semibold text-marrom mb-4">Despesas de Estoque</h3>
+                    <p class="text-3xl font-bold text-red-500" id="despesas-mes-financeiro">R$ 0,00</p>
+                    <p class="text-sm text-gray-500 mt-2">Valor total investido em estoque</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 card-shadow card-border-nude">
+                    <h3 class="text-lg font-semibold text-marrom mb-4">Lucro Líquido</h3>
+                    <p class="text-3xl font-bold text-green-600" id="lucro-mes-financeiro">R$ 0,00</p>
+                    <p class="text-sm text-gray-500 mt-2" id="margem-lucro">Margem: 0%</p>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="bg-white rounded-xl card-shadow card-border-marrom">
+                <div class="border-b border-gray-200">
+                    <nav class="flex space-x-8 px-6">
+                        <button onclick="showFinanceTab('receitas')" class="finance-tab py-4 px-1 border-b-2 border-marrom text-marrom font-medium">Receitas</button>
+                        <button onclick="showFinanceTab('despesas')" class="finance-tab py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700">Despesas de Estoque</button>
+                        <button onclick="showFinanceTab('relatorios')" class="finance-tab py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700">Relatórios</button>
+                    </nav>
+                </div>
+
+                <div id="receitas-tab" class="finance-content p-6">
+                    <div class="mb-6">
+  <div class="bg-nude px-4 py-2 rounded-lg shadow-sm">
+    <h3 class="text-xl font-semibold text-marrom">Receitas (Pedidos Entregues)</h3>
+  </div>
+  <div class="flex items-center space-x-2 mt-3">
+    <label for="filtro-mes-receitas" class="text-sm font-medium text-gray-700">Mês:</label>
+    <select id="filtro-mes-receitas" class="border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-rosa focus:border-transparent" onchange="atualizarListaReceitas()">
+      <!-- Opções de meses -->
+    </select>
+
+    <label for="filtro-ano-receitas" class="text-sm font-medium text-gray-700">Ano:</label>
+    <select id="filtro-ano-receitas" class="border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-rosa focus:border-transparent" onchange="atualizarListaReceitas()">
+      <!-- Opções de anos -->
+    </select>
+  </div>
+</div>
+                    <div class="space-y-4" id="receitas-lista">
+                        <!-- Receitas serão geradas dinamicamente -->
+                    </div>
+                </div>
+
+                <div id="despesas-tab" class="finance-content p-6 hidden">
+                    <div class="mb-6">
+  <div class="bg-nude px-4 py-2 rounded-lg shadow-sm">
+    <h3 class="text-xl font-semibold text-marrom">Despesas de Estoque</h3>
+  </div>
+  <div class="flex items-center space-x-2 mt-3">
+    <label for="filtro-mes-despesas" class="text-sm font-medium text-gray-700">Mês:</label>
+    <select id="filtro-mes-despesas" class="border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-rosa focus:border-transparent" onchange="atualizarListaDespesas()">
+      <!-- Opções de meses -->
+    </select>
+
+    <label for="filtro-ano-despesas" class="text-sm font-medium text-gray-700">Ano:</label>
+    <select id="filtro-ano-despesas" class="border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-rosa focus:border-transparent" onchange="atualizarListaDespesas()">
+      <!-- Opções de anos -->
+    </select>
+  </div>
+</div>
+                    <div class="space-y-4" id="despesas-lista">
+                        <!-- Despesas serão geradas dinamicamente -->
+                    </div>
+                </div>
+
+                <div id="relatorios-tab" class="finance-content p-6 hidden">
+                    <h3 class="text-xl font-semibold text-marrom mb-6">Relatório Atual</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-medium text-marrom mb-3">Resumo Geral</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span>Receitas (Pedidos Entregues):</span>
+                                    <span class="text-green-600 font-medium" id="relatorio-receitas">R$ 0,00</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Despesas de Estoque:</span>
+                                    <span class="text-red-500 font-medium" id="relatorio-despesas">R$ 0,00</span>
+                                </div>
+                                <hr>
+                                <div class="flex justify-between font-bold">
+                                    <span>Lucro Líquido:</span>
+                                    <span class="text-green-600" id="relatorio-lucro">R$ 0,00</span>
+                                </div>
+                                <div class="flex justify-between text-xs">
+                                    <span>Margem de Lucro:</span>
+                                    <span class="text-blue-600" id="relatorio-margem">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-medium text-marrom mb-3">Estatísticas do Estoque</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span>Total de Itens:</span>
+                                    <span class="font-medium" id="relatorio-total-itens">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Itens com Estoque Baixo:</span>
+                                    <span class="text-yellow-600 font-medium" id="relatorio-baixo">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Itens Críticos:</span>
+                                    <span class="text-red-500 font-medium" id="relatorio-critico">0</span>
+                                </div>
+                                <hr>
+                                <div class="flex justify-between">
+                                    <span>Total de Pedidos:</span>
+                                    <span class="font-medium" id="relatorio-total-pedidos">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Pedidos Entregues:</span>
+                                    <span class="text-green-600 font-medium" id="relatorio-pedidos-entregues">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estoque Section -->
+        <div id="estoque" class="section hidden">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-marrom mb-2">Controle de Estoque</h2>
+                    <p class="text-gray-600">Gerencie ingredientes e materiais</p>
+                </div>
+                <button onclick="showModal('novo-item')" class="bg-marrom text-white px-6 py-3 rounded-lg hover:bg-marrom/90 transition-colors font-medium">
+                    + Novo Item
+                </button>
+            </div>
+
+            <!-- Layout principal com sidebar de categorias -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Sidebar de categorias (vertical) -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-xl card-shadow p-4 card-border-marrom">
+                        <h3 class="text-lg font-semibold text-marrom mb-4">Categorias</h3>
+                        <div class="space-y-2">
+                            <button onclick="selecionarCategoria('')" class="categoria-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors duration-200 bg-marrom text-white" data-category="">
+                                Todas
+                            </button>
+                            <button onclick="selecionarCategoria('ingredientes')" class="categoria-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200" data-category="ingredientes">
+                                🥛 Ingredientes
+                            </button>
+                            <button onclick="selecionarCategoria('embalagens')" class="categoria-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200" data-category="embalagens">
+                                📦 Embalagens
+                            </button>
+                            <button onclick="selecionarCategoria('utensilios')" class="categoria-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200" data-category="utensilios">
+                                🥄 Utensílios
+                            </button>
+                            <button onclick="selecionarCategoria('equipamentos')" class="categoria-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200" data-category="equipamentos">
+                                ⚙️ Equipamentos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Área principal com filtros e cards -->
+                <div class="lg:col-span-3">
+                    <!-- Filtros adicionais -->
+                    <div class="bg-white rounded-xl p-4 card-shadow mb-6 card-border-nude">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <select id="filtro-status" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                                <option value="">Todos os Status</option>
+                                <option value="normal">Normal</option>
+                                <option value="baixo">Baixo</option>
+                                <option value="critico">Crítico</option>
+                            </select>
+                            <input type="text" id="busca-item" placeholder="Buscar item..." class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                            <button onclick="aplicarFiltros()" class="bg-marrom text-white px-4 py-2 rounded-lg hover:bg-marrom/90 transition-colors font-medium">
+                                🔍 Filtrar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Alertas de Estoque Baixo -->
+                    <div id="alertas-estoque-section" class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg hidden">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <span class="text-red-400 text-xl">⚠️</span>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-red-800">Atenção: Itens com estoque baixo</h3>
+                                <div class="mt-2 text-sm text-red-700" id="alertas-count">
+                                    <p>0 itens precisam de reposição urgente</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cards de Estoque -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="estoque-cards-container">
+                        <!-- Cards serão gerados dinamicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <!-- Novo Pedido Modal -->
+        <div id="novo-pedido" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-marrom">Novo Pedido</h3>
+                    <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Cliente</label>
+                            <input type="text" id="novo-cliente" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
+                            <input type="tel" id="novo-telefone" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Data de Entrega</label>
+                            <input type="date" id="novo-data-entrega" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Produto</label>
+                        <input type="text" id="novo-produto" placeholder="Ex: Bolo de Chocolate 2kg" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Quantidade</label>
+                            <input type="number" id="novo-quantidade" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Valor Total</label>
+                            <input type="text" id="novo-valor" placeholder="R$ 0,00" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                    </div>
+                    <!-- Campo para adicionar imagem -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Adicionar Imagem do Produto</label>
+                        <input type="file" id="novo-imagem-upload" accept="image/*" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        <div id="novo-imagem-preview-container" class="mt-3 hidden">
+                            <img id="novo-imagem-preview" src="#" alt="Pré-visualização da imagem" class="max-w-full h-32 object-cover rounded-lg border border-gray-200">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+                        <textarea rows="3" id="novo-observacoes" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent"></textarea>
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <button onclick="hideModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Cancelar</button>
+                    <button onclick="salvarPedido()" class="bg-marrom text-white px-6 py-2 rounded-lg hover:bg-marrom/90 transition-colors">Salvar Pedido</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalhes do Pedido Modal -->
+        <div id="detalhes-pedido" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-marrom">Detalhes do Pedido</h3>
+                    <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="p-6">
+                    <!-- Status Badge -->
+                    <div class="mb-6">
+                        <span id="status-badge" class="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-800">Em Produção</span>
+                    </div>
+
+                    <!-- Imagem do Produto -->
+                    <div id="detalhes-imagem-container" class="mb-6 hidden">
+                        <h4 class="font-semibold text-marrom mb-3">Imagem do Produto</h4>
+                        <img id="detalhes-imagem" src="#" alt="Imagem do Produto" class="w-full max-w-md mx-auto h-48 object-cover rounded-lg border border-gray-200 block cursor-pointer" onclick="abrirImageViewer(this.src)">
+                    </div>
+
+                    <!-- Informações do Cliente -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-marrom mb-3">Informações do Cliente</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-600">Nome</p>
+                                <p class="font-medium" id="cliente-nome">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Telefone</p>
+                                <p class="font-medium" id="cliente-telefone">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Data de Entrega</p>
+                                <p class="font-medium text-blue-600" id="data-entrega">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detalhes do Produto -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-marrom mb-3">Detalhes do Produto</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-600">Produto</p>
+                                <p class="font-medium" id="produto-nome">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Quantidade</p>
+                                <p class="font-medium" id="produto-quantidade">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Valor Total</p>
+                                <p class="font-medium text-green-600 text-lg" id="produto-valor">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Observações -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-marrom mb-3">Observações</h4>
+                        <p class="text-gray-700" id="pedido-observacoes">-</p>
+                    </div>
+
+                    <!-- Histórico -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-marrom mb-3">Histórico do Pedido</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                <div>
+                                    <p class="text-sm font-medium">Pedido criado</p>
+                                    <p class="text-xs text-gray-500">22/12/2024 às 14:30</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                                <div>
+                                    <p class="text-sm font-medium">Em produção</p>
+                                    <p class="text-xs text-gray-500">23/12/2024 às 09:00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações -->
+                <div class="p-6 border-t border-gray-200 flex flex-wrap gap-3 justify-end">
+                    <button onclick="editarPedido()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        ✏️ Editar
+                    </button>
+                    <button onclick="finalizarPedido()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                        ✅ Finalizar
+                    </button>
+                    <button onclick="confirmarRemocaoPedido()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                        🗑️ Remover
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Edição de Pedido -->
+        <div id="editar-pedido" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-marrom">Editar Pedido</h3>
+                    <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Cliente</label>
+                            <input type="text" id="edit-cliente" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
+                            <input type="tel" id="edit-telefone" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Data de Entrega</label>
+                            <input type="date" id="edit-data" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Produto</label>
+                        <input type="text" id="edit-produto" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Quantidade</label>
+                            <input type="number" id="edit-quantidade" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Valor Total</label>
+                            <input type="text" id="edit-valor" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                    </div>
+                    <!-- Campo para editar imagem -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Alterar Imagem do Produto</label>
+                        <input type="file" id="edit-imagem-upload" accept="image/*" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        <div id="edit-imagem-preview-container" class="mt-3 hidden">
+                            <img id="edit-imagem-preview" src="#" alt="Pré-visualização da imagem" class="max-w-full h-32 object-cover rounded-lg border border-gray-200">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+                        <textarea rows="3" id="edit-observacoes" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent"></textarea>
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <button onclick="hideModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Cancelar</button>
+                    <button onclick="salvarEdicao()" class="bg-marrom text-white px-6 py-2 rounded-lg hover:bg-marrom/90 transition-colors">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Detalhes do Item de Estoque -->
+        <div id="detalhes-item" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-marrom">Detalhes do Item</h3>
+                    <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="p-6">
+                    <!-- Status Badge -->
+                    <div class="mb-6">
+                        <span id="item-status-badge" class="px-3 py-1 text-sm font-semibold rounded-full">Normal</span>
+                    </div>
+
+                    <!-- Informações Gerais -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-marrom mb-3">Informações Gerais</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-600">Nome do Item</p>
+                                <p class="font-medium" id="item-nome-detalhe">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Categoria</p>
+                                <p class="font-medium capitalize" id="item-categoria-detalhe">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Quantidade Atual</p>
+                                <p class="font-medium text-lg" id="item-quantidade-detalhe">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Unidade</p>
+                                <p class="font-medium" id="item-unidade-detalhe">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informações Comerciais -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-marrom mb-3">Informações Comerciais</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-600">Preço Unitário</p>
+                                <p class="font-medium text-green-600 text-lg" id="item-preco-detalhe">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Fornecedor</p>
+                                <p class="font-medium" id="item-fornecedor-detalhe">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Controle de Estoque -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-marrom mb-3">Controle de Estoque</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-600">Estoque Mínimo</p>
+                                <p class="font-medium" id="item-minimo-detalhe">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Estoque Crítico</p>
+                                <p class="font-medium" id="item-critico-detalhe">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Observações -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-marrom mb-3">Observações</h4>
+                        <p class="text-gray-700" id="item-observacoes-detalhe">-</p>
+                    </div>
+                </div>
+
+                <!-- Ações -->
+                <div class="p-6 border-t border-gray-200 flex flex-wrap gap-3 justify-end">
+                    <button onclick="adicionarQuantidadeItem(itemAtual.id)" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                        ➕ Adicionar Estoque
+                    </button>
+                    <button onclick="editarItemEstoque(itemAtual.id)" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        ✏️ Editar
+                    </button>
+                    <button onclick="confirmarRemocaoItem(itemAtual.id)" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                        🗑️ Remover
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Adicionar Quantidade ao Estoque -->
+        <div id="adicionar-quantidade" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-xl max-w-md w-full">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-marrom">Adicionar ao Estoque</h3>
+                    <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <!-- Informações do Item -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-medium text-marrom mb-2">Item Selecionado</h4>
+                        <p class="text-lg font-semibold" id="adicionar-item-nome">-</p>
+                        <p class="text-sm text-gray-600">Quantidade atual: <span class="font-medium" id="adicionar-quantidade-atual">-</span></p>
+                    </div>
+
+                    <!-- Quantidade a adicionar -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Quantidade a Adicionar *</label>
+                        <input type="number" id="adicionar-quantidade-input" min="0.01" step="0.01" placeholder="Ex: 10" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">A quantidade será somada ao estoque atual</p>
+                    </div>
+
+                    <!-- Preço Unitário da Compra -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Preço Unitário da Compra *</label>
+                        <input type="text" id="adicionar-preco-unitario-input" placeholder="R$ 0,00" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Valor pago por unidade nesta compra.</p>
+                    </div>
+
+                    <!-- Observações -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Observações (Opcional)</label>
+                        <textarea rows="2" id="adicionar-observacoes-input" placeholder="Ex: Compra de fornecedor X..." class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent"></textarea>
+                    </div>
+
+                    <!-- Preview da nova quantidade -->
+                    <div class="bg-blue-50 rounded-lg p-3">
+                        <p class="text-sm text-blue-800">
+                            <span class="font-medium">Nova quantidade será:</span>
+                            <span id="preview-nova-quantidade" class="font-bold">-</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <button onclick="hideModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Cancelar</button>
+                    <button onclick="confirmarAdicaoQuantidade()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">Adicionar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Novo Item de Estoque -->
+        <div id="novo-item" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-marrom">Novo Item de Estoque</h3>
+                    <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Item *</label>
+                            <input type="text" id="item-nome" placeholder="Ex: Farinha de Trigo" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Categoria *</label>
+                            <select id="item-categoria" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                                <option value="">Selecione uma categoria</option>
+                                <option value="ingredientes">Ingredientes</option>
+                                <option value="embalagens">Embalagens</option>
+                                <option value="utensilios">Utensílios</option>
+                                <option value="equipamentos">Equipamentos</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Quantidade Atual *</label>
+                            <input type="number" id="item-quantidade" min="0" step="0.01" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Unidade *</label>
+                            <select id="item-unidade" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                                <option value="">Selecione a unidade</option>
+                                <option value="kg">Quilogramas (kg)</option>
+                                <option value="g">Gramas (g)</option>
+                                <option value="l">Litros (l)</option>
+                                <option value="ml">Mililitros (ml)</option>
+                                <option value="un">Unidades (un)</option>
+                                <option value="cx">Caixas (cx)</option>
+                                <option value="pct">Pacotes (pct)</option>
+                                <option value="dz">Dúzias (dz)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Preço Unitário</label>
+                            <input type="text" id="item-preco" placeholder="R$ 0,00" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fornecedor</label>
+                            <input type="text" id="item-fornecedor" placeholder="Nome do fornecedor" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Estoque Mínimo</label>
+                            <input type="number" id="item-minimo" min="0" step="0.01" placeholder="Quantidade mínima" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Estoque Crítico</label>
+                            <input type="number" id="item-critico" min="0" step="0.01" placeholder="Quantidade crítica" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+                        <textarea rows="3" id="item-observacoes" placeholder="Informações adicionais..." class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent"></textarea>
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <button onclick="hideModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Cancelar</button>
+                    <button onclick="salvarItem()" class="bg-marrom text-white px-6 py-2 rounded-lg hover:bg-marrom/90 transition-colors">Salvar Item</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Editar Item de Estoque -->
+        <div id="editar-item" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-marrom">Editar Item de Estoque</h3>
+                    <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Item *</label>
+                            <input type="text" id="edit-item-nome" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Categoria *</label>
+                            <select id="edit-item-categoria" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                                <option value="ingredientes">Ingredientes</option>
+                                <option value="embalagens">Embalagens</option>
+                                <option value="utensilios">Utensílios</option>
+                                <option value="equipamentos">Equipamentos</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Quantidade Atual *</label>
+                            <input type="number" id="edit-item-quantidade" min="0" step="0.01" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Unidade *</label>
+                            <select id="edit-item-unidade" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                                <option value="kg">Quilogramas (kg)</option>
+                                <option value="g">Gramas (g)</option>
+                                <option value="l">Litros (l)</option>
+                                <option value="ml">Mililitros (ml)</option>
+                                <option value="un">Unidades (un)</option>
+                                <option value="cx">Caixas (cx)</option>
+                                <option value="pct">Pacotes (pct)</option>
+                                <option value="dz">Dúzias (dz)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Preço Unitário</label>
+                            <input type="text" id="edit-item-preco" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fornecedor</label>
+                            <input type="text" id="edit-item-fornecedor" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Estoque Mínimo</label>
+                            <input type="number" id="edit-item-minimo" min="0" step="0.01" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Estoque Crítico</label>
+                            <input type="number" id="edit-item-critico" min="0" step="0.01" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+                        <textarea rows="3" id="edit-item-observacoes" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rosa focus:border-transparent"></textarea>
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <button onclick="hideModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Cancelar</button>
+                    <button onclick="salvarEdicaoItem()" class="bg-marrom text-white px-6 py-2 rounded-lg hover:bg-marrom/90 transition-colors">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Confirmar Remoção Item -->
+        <div id="confirmar-remocao-item" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-xl max-w-md w-full">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-gray-900">Confirmar Remoção</h3>
+                    <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-center text-gray-600 mb-6">Tem certeza que deseja remover este item do estoque? Esta ação não pode ser desfeita.</p>
+                    <div class="flex space-x-3">
+                        <button onclick="hideModal()" class="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+                            Cancelar
+                        </button>
+                        <button onclick="executarRemocaoItem()" class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                            Remover
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Confirmação de Remoção de Pedido -->
+        <div id="confirmar-remocao-pedido" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-xl max-w-md w-full">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-gray-900">Confirmar Remoção</h3>
+                    <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-center text-gray-600 mb-6">Tem certeza que deseja remover este pedido? Esta ação não pode ser desfeita.</p>
+                    <div class="flex space-x-3">
+                        <button onclick="hideModal()" class="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+                            Cancelar
+                        </button>
+                        <button onclick="executarRemocaoPedido()" class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                            Remover
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Visualização de Imagem -->
+        <div id="imagem-viewer-modal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto flex flex-col">
+                <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-marrom">Visualizar Imagem</h3>
+                    <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-4 flex-grow flex items-center justify-center">
+                    <img id="viewer-image" src="#" alt="Imagem Ampliada" class="max-w-full max-h-full object-contain rounded-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SISTEMA DE LOCALSTORAGE PARA PERSISTIR OS DADOS - MELHORADO
+        function salvarDados() {
+            try {
+                // Calcular tamanho aproximado dos dados
+                const dadosString = JSON.stringify({
+                    pedidos: pedidos,
+                    estoque: estoque
+                });
+                
+                const tamanhoKB = Math.round(dadosString.length / 1024);
+                console.log(`Tentando salvar ${tamanhoKB} KB de dados...`);
+                
+                // Verificar se é muito grande (limite típico é 5-10MB)
+                if (tamanhoKB > 4000) { // 4MB como limite de segurança
+                    console.warn('Dados muito grandes para localStorage:', tamanhoKB, 'KB');
+                    
+                    // Tentar salvar sem as imagens dos pedidos se for muito grande
+                    const pedidosSemImagem = pedidos.map(pedido => ({
+                        ...pedido,
+                        imagem: pedido.imagem ? 'IMAGEM_REMOVIDA_POR_TAMANHO' : ''
+                    }));
+                    
+                    const dadosSemImagemString = JSON.stringify({
+                        pedidos: pedidosSemImagem,
+                        estoque: estoque
+                    });
+                    
+                    const tamanhoSemImagemKB = Math.round(dadosSemImagemString.length / 1024);
+                    console.log(`Tentando salvar sem imagens: ${tamanhoSemImagemKB} KB`);
+                    
+                    if (tamanhoSemImagemKB > 4000) {
+                        throw new Error('DADOS_MUITO_GRANDES');
+                    }
+                    
+                    localStorage.setItem('duplaGourmetPedidos', JSON.stringify(pedidosSemImagem));
+                    localStorage.setItem('duplaGourmetEstoque', JSON.stringify(estoque));
+                    
+                    console.warn('Dados salvos, mas as imagens foram removidas para economizar espaço');
+                    // Não mostrar alerta aqui, pois os dados foram salvos com sucesso
+                    
+                } else {
+                    // Salvar normalmente
+                    localStorage.setItem('duplaGourmetPedidos', JSON.stringify(pedidos));
+                    localStorage.setItem('duplaGourmetEstoque', JSON.stringify(estoque));
+                    console.log('Dados salvos com sucesso no localStorage');
+                }
+                
+            } catch (error) {
+                console.error('Erro ao salvar dados:', error);
+                
+                if (error.name === 'QuotaExceededError' || error.message === 'DADOS_MUITO_GRANDES') {
+                    // Tentar salvar apenas os dados essenciais (sem imagens)
+                    try {
+                        const pedidosEssenciais = pedidos.map(pedido => ({
+                            ...pedido,
+                            imagem: '' // Remove todas as imagens
+                        }));
+                        
+                        localStorage.setItem('duplaGourmetPedidos', JSON.stringify(pedidosEssenciais));
+                        localStorage.setItem('duplaGourmetEstoque', JSON.stringify(estoque));
+                        
+                        console.log('Dados salvos sem as imagens devido ao limite de armazenamento');
+                        alert('⚠️ Dados salvos com sucesso!\n\nNota: As imagens dos pedidos não foram salvas devido ao limite de armazenamento do navegador. Os demais dados estão seguros.');
+                        
+                    } catch (secondError) {
+                        console.error('Erro mesmo ao salvar dados essenciais:', secondError);
+                        alert('❌ Não foi possível salvar os dados.\n\nO armazenamento do navegador está cheio. Tente:\n• Limpar o cache do navegador\n• Exportar os dados importantes\n• Usar menos imagens nos pedidos');
+                    }
+                } else {
+                    alert('❌ Erro inesperado ao salvar dados.\n\nPor favor, tente novamente. Se o problema persistir, considere exportar seus dados.');
+                }
+            }
+        }
+
+        function carregarDados() {
+            try {
+                const dadosPedidos = localStorage.getItem('duplaGourmetPedidos');
+                const dadosEstoque = localStorage.getItem('duplaGourmetEstoque');
+                
+                if (dadosPedidos) {
+                    pedidos = JSON.parse(dadosPedidos);
+                    console.log('Pedidos carregados do localStorage:', pedidos.length, 'pedidos');
+                } else {
+                    console.log('Nenhum pedido encontrado no localStorage. Usando dados padrão.');
+                    pedidos = [];
+                }
+
+                if (dadosEstoque) {
+                    estoque = JSON.parse(dadosEstoque);
+                    // Garante que cada item de estoque tenha um historicoCompras
+                    estoque.forEach(item => {
+                        if (!item.historicoCompras) {
+                            item.historicoCompras = [];
+                            // Se o item já tinha preco e quantidade, adicione uma entrada inicial ao histórico
+                            if (item.preco && item.quantidade) {
+                                item.historicoCompras.push({
+                                    data: '2024-01-01', // Data arbitrária para itens antigos
+                                    quantidade: parseFloat(item.quantidade),
+                                    precoUnitario: precoParaNumero(item.preco),
+                                    observacao: 'Estoque inicial (migrado)'
+                                });
+                            }
+                        }
+                    });
+                    console.log('Estoque carregado do localStorage:', estoque.length, 'itens');
+                } else {
+                    console.log('Nenhum estoque encontrado no localStorage. Usando dados padrão.');
+                    estoque = [
+                        {
+                            id: 1,
+                            nome: 'Farinha de Trigo',
+                            categoria: 'ingredientes',
+                            quantidade: 2,
+                            unidade: 'kg',
+                            preco: 'R$ 4,50',
+                            fornecedor: 'Distribuidora ABC',
+                            minimo: 5,
+                            critico: 2,
+                            observacoes: 'Farinha tipo 1',
+                            historicoCompras: [{ data: '2024-01-01', quantidade: 2, precoUnitario: 4.50, observacao: 'Estoque inicial' }]
+                        },
+                        {
+                            id: 2,
+                            nome: 'Açúcar Cristal',
+                            categoria: 'ingredientes',
+                            quantidade: 5,
+                            unidade: 'kg',
+                            preco: 'R$ 3,20',
+                            fornecedor: 'Atacadão',
+                            minimo: 10,
+                            critico: 3,
+                            observacoes: '',
+                            historicoCompras: [{ data: '2024-01-01', quantidade: 5, precoUnitario: 3.20, observacao: 'Estoque inicial' }]
+                        },
+                        {
+                            id: 3,
+                            nome: 'Chocolate em Pó',
+                            categoria: 'ingredientes',
+                            quantidade: 15,
+                            unidade: 'kg',
+                            preco: 'R$ 12,00',
+                            fornecedor: 'Chocolates Silva',
+                            minimo: 8,
+                            critico: 3,
+                            observacoes: 'Chocolate 50% cacau',
+                            historicoCompras: [{ data: '2024-01-01', quantidade: 15, precoUnitario: 12.00, observacao: 'Estoque inicial' }]
+                        }
+                    ];
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados do localStorage:', error);
+                alert('⚠️ Erro ao carregar dados salvos.\n\nOs dados podem estar corrompidos. O sistema iniciará com dados padrão.');
+                pedidos = [];
+                estoque = [];
+            }
+        }
+
+        // FUNÇÃO PARA CONVERTER PREÇO STRING EM NÚMERO
+        function precoParaNumero(precoStr) {
+            if (!precoStr || precoStr === '') return 0;
+            
+            // Remove "R$" e espaços, substitui vírgula por ponto
+            const numeroStr = precoStr.toString()
+                .replace('R$', '')
+                .replace(/\s/g, '')
+                .replace(',', '.');
+            
+            const numero = parseFloat(numeroStr);
+            return isNaN(numero) ? 0 : numero;
+        }
+
+        // FUNÇÃO PARA CONVERTER NÚMERO EM STRING DE PREÇO
+        function numeroParaPreco(numero) {
+            return `R$ ${numero.toFixed(2).replace('.', ',')}`;
+        }
+
+        // FUNÇÃO PARA CALCULAR DESPESAS DO ESTOQUE (AGORA GASTOS MENSAIS)
+        function calcularGastosMensais(ano, mes) {
+            let totalGastos = 0;
+            
+            estoque.forEach(item => {
+                if (item.historicoCompras) {
+                    item.historicoCompras.forEach(compra => {
+                        const dataCompra = new Date(compra.data + 'T00:00:00'); // Adiciona T00:00:00 para evitar problemas de fuso horário
+                        if (dataCompra.getFullYear() === ano && (dataCompra.getMonth() + 1) === mes) {
+                            totalGastos += (compra.quantidade * compra.precoUnitario);
+                        }
+                    });
+                }
+            });
+            
+            console.log(`Total de gastos para ${mes}/${ano}:`, totalGastos);
+            return totalGastos;
+        }
+
+        // FUNÇÃO PARA CALCULAR VENDAS DOS ÚLTIMOS 7 DIAS
+        function atualizarVendas7Dias() {
+            const container = document.getElementById('vendas-7-dias');
+            
+            // Obter data atual
+            const hoje = new Date();
+            const vendasPorDia = [];
+            
+            // Calcular vendas dos últimos 7 dias
+            for (let i = 6; i >= 0; i--) {
+                const data = new Date(hoje);
+                data.setDate(data.getDate() - i);
+                
+                const dataStr = data.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+                const nomeDia = data.toLocaleDateString('pt-BR', { weekday: 'long' });
+                const nomeCapitalizado = nomeDia.charAt(0).toUpperCase() + nomeDia.slice(1);
+                
+                // Somar valores dos pedidos entregues nesta data
+                let valorDia = 0;
+                pedidos.forEach(pedido => {
+                    if (pedido.status === 'Entregue' && pedido.dataEntrega === dataStr) {
+                        valorDia += precoParaNumero(pedido.valor);
+                    }
+                });
+                
+                vendasPorDia.push({
+                    dia: nomeCapitalizado,
+                    valor: valorDia,
+                    data: dataStr
+                });
+            }
+            
+            console.log('Vendas dos últimos 7 dias calculadas:', vendasPorDia);
+            
+            // Encontrar o valor máximo para calcular as porcentagens das barras
+            const valorMaximo = Math.max(...vendasPorDia.map(v => v.valor));
+            
+            // Verificar se há vendas
+            const temVendas = vendasPorDia.some(v => v.valor > 0);
+            
+            if (!temVendas) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-gray-500">Nenhuma venda registrada</p>
+                        <p class="text-gray-400 text-sm">As vendas aparecerão aqui quando os pedidos forem entregues</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Renderizar as vendas
+            container.innerHTML = '';
+            vendasPorDia.forEach((venda, index) => {
+                const porcentagem = valorMaximo > 0 ? (venda.valor / valorMaximo * 100) : 0;
+                const corBarra = index % 2 === 0 ? 'bg-rosa' : 'bg-nude';
+                
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center';
+                div.innerHTML = `
+                    <span class="text-gray-600 w-20">${venda.dia}</span>
+                    <div class="flex items-center space-x-2 flex-1">
+                        <div class="w-24 bg-gray-200 rounded-full h-2">
+                            <div class="${corBarra} h-2 rounded-full transition-all duration-300" style="width: ${porcentagem}%"></div>
+                        </div>
+                        <span class="text-marrom font-medium w-20 text-right">${numeroParaPreco(venda.valor)}</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function atualizarDashboard() {
+            const totalPedidos = pedidos.length;
+            
+            // Calcular receita dos pedidos entregues
+            let receitaTotal = 0;
+            let pedidosEntregues = 0;
+            
+            pedidos.forEach(pedido => {
+                if (pedido.status === 'Entregue') {
+                    pedidosEntregues++;
+                    const valor = precoParaNumero(pedido.valor);
+                    if (!isNaN(valor)) {
+                        receitaTotal += valor;
+                    }
+                }
+            });
+
+            // Obter mês e ano atual para o dashboard
+            const hoje = new Date();
+            const mesAtual = hoje.getMonth() + 1;
+            const anoAtual = hoje.getFullYear();
+
+            // Calcular despesas do estoque para o mês atual (gastos mensais)
+            const despesasTotal = calcularGastosMensais(anoAtual, mesAtual);
+            const lucroTotal = receitaTotal - despesasTotal;
+
+            // Atualizar KPIs do dashboard
+            document.getElementById('pedidos-mes').textContent = totalPedidos;
+            document.getElementById('receita-mes').textContent = numeroParaPreco(receitaTotal);
+            document.getElementById('despesas-mes').textContent = numeroParaPreco(despesasTotal);
+            document.getElementById('lucro-mes').textContent = numeroParaPreco(lucroTotal);
+
+            // Atualizar seção financeira também
+            const receitaMesFinanceiro = document.getElementById('receita-mes-financeiro');
+            const despesasMesFinanceiro = document.getElementById('despesas-mes-financeiro');
+            const lucroMesFinanceiro = document.getElementById('lucro-mes-financeiro');
+            const margemLucro = document.getElementById('margem-lucro');
+
+            if (receitaMesFinanceiro) receitaMesFinanceiro.textContent = numeroParaPreco(receitaTotal);
+            if (despesasMesFinanceiro) despesasMesFinanceiro.textContent = numeroParaPreco(despesasTotal);
+            if (lucroMesFinanceiro) lucroMesFinanceiro.textContent = numeroParaPreco(lucroTotal);
+            
+            // Calcular margem de lucro
+            const margem = receitaTotal > 0 ? ((lucroTotal / receitaTotal) * 100) : 0;
+            if (margemLucro) margemLucro.textContent = `Margem: ${margem.toFixed(1)}%`;
+
+            // Atualizar relatórios
+            atualizarRelatorios(receitaTotal, despesasTotal, lucroTotal, margem, pedidosEntregues);
+
+            // Atualizar listas financeiras
+            atualizarListaReceitas();
+            // A lista de despesas será atualizada com base nos filtros de mês/ano
+            atualizarListaDespesas();
+
+            // Atualizar vendas dos últimos 7 dias
+            atualizarVendas7Dias();
+
+            atualizarAlertasEstoque();
+        }
+
+        function atualizarRelatorios(receita, despesas, lucro, margem, pedidosEntregues) {
+            // Elementos do relatório
+            const relatorioReceitas = document.getElementById('relatorio-receitas');
+            const relatorioDespesas = document.getElementById('relatorio-despesas');
+            const relatorioLucro = document.getElementById('relatorio-lucro');
+            const relatorioMargem = document.getElementById('relatorio-margem');
+            const relatorioTotalItens = document.getElementById('relatorio-total-itens');
+            const relatorioBaixo = document.getElementById('relatorio-baixo');
+            const relatorioCritico = document.getElementById('relatorio-critico');
+            const relatorioTotalPedidos = document.getElementById('relatorio-total-pedidos');
+            const relatorioPedidosEntregues = document.getElementById('relatorio-pedidos-entregues');
+
+            if (relatorioReceitas) relatorioReceitas.textContent = numeroParaPreco(receita);
+            if (relatorioDespesas) relatorioDespesas.textContent = numeroParaPreco(despesas);
+            if (relatorioLucro) relatorioLucro.textContent = numeroParaPreco(lucro);
+            if (relatorioMargem) relatorioMargem.textContent = `${margem.toFixed(1)}%`;
+
+            // Estatísticas do estoque
+            const itensBaixo = estoque.filter(item => {
+                const quantidade = parseFloat(item.quantidade);
+                const minimo = parseFloat(item.minimo);
+                const critico = parseFloat(item.critico);
+                return !isNaN(minimo) && quantidade <= minimo && (isNaN(critico) || quantidade > critico);
+            }).length;
+
+            const itensCritico = estoque.filter(item => {
+                const quantidade = parseFloat(item.quantidade);
+                const critico = parseFloat(item.critico);
+                return !isNaN(critico) && quantidade <= critico;
+            }).length;
+
+            if (relatorioTotalItens) relatorioTotalItens.textContent = estoque.length;
+            if (relatorioBaixo) relatorioBaixo.textContent = itensBaixo;
+            if (relatorioCritico) relatorioCritico.textContent = itensCritico;
+            if (relatorioTotalPedidos) relatorioTotalPedidos.textContent = pedidos.length;
+            if (relatorioPedidosEntregues) relatorioPedidosEntregues.textContent = pedidosEntregues;
+        }
+
+                function atualizarListaReceitas() {
+            const container = document.getElementById('receitas-lista');
+            if (!container) return;
+
+            const filtroMes = parseInt(document.getElementById('filtro-mes-receitas').value);
+            const filtroAno = parseInt(document.getElementById('filtro-ano-receitas').value);
+
+            let pedidosEntreguesFiltrados = pedidos.filter(pedido => {
+                if (pedido.status !== 'Entregue') return false;
+                
+                const dataEntregaObj = new Date(pedido.dataEntrega + 'T00:00:00');
+                return dataEntregaObj.getFullYear() === filtroAno && (dataEntregaObj.getMonth() + 1) === filtroMes;
+            });
+            
+            if (pedidosEntreguesFiltrados.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-gray-500">Nenhum pedido entregue para o período selecionado.</p>
+                        <p class="text-gray-400 text-sm">As receitas aparecerão aqui quando os pedidos forem finalizados.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            pedidosEntreguesFiltrados.forEach(pedido => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center p-4 bg-green-50 rounded-lg';
+                
+                const dataEntregaObj = new Date(pedido.dataEntrega + 'T00:00:00');
+                const dataFormatada = dataEntregaObj.toLocaleDateString('pt-BR');
+                
+                div.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-green-800 truncate">${pedido.produto} - ${pedido.cliente}</p>
+                        <p class="text-sm text-green-600">Entregue em ${dataFormatada}</p>
+                        ${pedido.observacoes ? `<p class="text-xs text-gray-600 truncate">Obs: ${pedido.observacoes}</p>` : ''}
+                    </div>
+                    <span class="text-green-700 font-bold text-lg ml-4 flex-shrink-0">${pedido.valor}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+                function atualizarListaDespesas() {
+            const container = document.getElementById('despesas-lista');
+            if (!container) return;
+
+            const filtroMes = parseInt(document.getElementById('filtro-mes-despesas').value);
+            const filtroAno = parseInt(document.getElementById('filtro-ano-despesas').value);
+
+            let despesasFiltradas = [];
+            estoque.forEach(item => {
+                if (item.historicoCompras) {
+                    item.historicoCompras.forEach(compra => {
+                        const dataCompra = new Date(compra.data + 'T00:00:00');
+                        if (dataCompra.getFullYear() === filtroAno && (dataCompra.getMonth() + 1) === filtroMes) {
+                            despesasFiltradas.push({
+                                nomeItem: item.nome,
+                                quantidade: compra.quantidade,
+                                unidade: item.unidade,
+                                precoUnitario: compra.precoUnitario,
+                                data: compra.data,
+                                observacao: compra.observacao
+                            });
+                        }
+                    });
+                }
+            });
+
+            if (despesasFiltradas.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-gray-500">Nenhuma despesa de estoque registrada para o período selecionado.</p>
+                        <p class="text-gray-400 text-sm">Adicione itens ao estoque para registrar despesas.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            despesasFiltradas.sort((a, b) => new Date(b.data) - new Date(a.data)); // Ordena por data mais recente
+            despesasFiltradas.forEach(despesa => {
+                const valorTotalCompra = despesa.quantidade * despesa.precoUnitario;
+                const dataFormatada = new Date(despesa.data + 'T00:00:00').toLocaleDateString('pt-BR');
+                
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center p-4 bg-red-50 rounded-lg';
+                div.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-red-800 truncate">${despesa.nomeItem}</p>
+                        <p class="text-sm text-red-600">${despesa.quantidade} ${despesa.unidade} @ ${numeroParaPreco(despesa.precoUnitario)}</p>
+                        <p class="text-xs text-gray-600">Data: ${dataFormatada}</p>
+                        ${despesa.observacao ? `<p class="text-xs text-gray-600 truncate">Obs: ${despesa.observacao}</p>` : ''}
+                    </div>
+                    <span class="text-red-700 font-bold text-lg ml-4 flex-shrink-0">- ${numeroParaPreco(valorTotalCompra)}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function preencherFiltrosMesAno() {
+            const selectMesDespesas = document.getElementById('filtro-mes-despesas');
+            const selectAnoDespesas = document.getElementById('filtro-ano-despesas');
+            const selectMesReceitas = document.getElementById('filtro-mes-receitas');
+            const selectAnoReceitas = document.getElementById('filtro-ano-receitas');
+
+            const meses = [
+                'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+            ];
+            const anoAtual = new Date().getFullYear();
+
+            // Preencher meses para Despesas
+            selectMesDespesas.innerHTML = '';
+            meses.forEach((mes, index) => {
+                const option = document.createElement('option');
+                option.value = index + 1;
+                option.textContent = mes;
+                selectMesDespesas.appendChild(option);
+            });
+
+            // Preencher anos para Despesas
+            selectAnoDespesas.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const ano = anoAtual - i;
+                const option = document.createElement('option');
+                option.value = ano;
+                option.textContent = ano;
+                selectAnoDespesas.appendChild(option);
+            }
+
+            // Preencher meses para Receitas
+            selectMesReceitas.innerHTML = '';
+            meses.forEach((mes, index) => {
+                const option = document.createElement('option');
+                option.value = index + 1;
+                option.textContent = mes;
+                selectMesReceitas.appendChild(option);
+            });
+
+            // Preencher anos para Receitas
+            selectAnoReceitas.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const ano = anoAtual - i;
+                const option = document.createElement('option');
+                option.value = ano;
+                option.textContent = ano;
+                selectAnoReceitas.appendChild(option);
+            }
+
+            // Selecionar mês e ano atual por padrão para ambos
+            const mesAtual = new Date().getMonth() + 1;
+            selectMesDespesas.value = mesAtual;
+            selectAnoDespesas.value = anoAtual;
+            selectMesReceitas.value = mesAtual;
+            selectAnoReceitas.value = anoAtual;
+        }
+
+
+        function atualizarAlertasEstoque() {
+            const alertasContainer = document.getElementById('alertas-estoque');
+            const alertasSection = document.getElementById('alertas-estoque-section');
+            const alertasCount = document.getElementById('alertas-count');
+            
+            const itensCriticos = estoque.filter(item => {
+                // Garante que minimo e critico sejam tratados como números e que a quantidade seja comparada corretamente
+                const quantidade = parseFloat(item.quantidade);
+                const minimo = parseFloat(item.minimo);
+                const critico = parseFloat(item.critico);
+
+                if (!isNaN(critico) && quantidade <= critico) {
+                    return true;
+                } else if (!isNaN(minimo) && quantidade <= minimo && (isNaN(critico) || quantidade > critico)) {
+                    return true; // Se não tem crítico, usa mínimo
+                }
+                return false;
+            });
+
+            if (itensCriticos.length > 0) {
+                alertasSection.classList.remove('hidden');
+                alertasCount.innerHTML = `<p>${itensCriticos.length} item(ns) precisam de reposição urgente</p>`;
+                
+                alertasContainer.innerHTML = '';
+                itensCriticos.slice(0, 3).forEach(item => {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'flex items-center justify-between p-3 bg-red-50 rounded-lg border-l-4 border-red-400';
+                    alertDiv.innerHTML = `
+                        <div>
+                            <p class="font-medium text-red-800">${item.nome}</p>
+                            <p class="text-sm text-red-600">Apenas ${item.quantidade}${item.unidade} restantes</p>
+                        </div>
+                        <span class="text-red-500 text-xl">⚠️</span>
+                    `;
+                    alertasContainer.appendChild(alertDiv);
+                });
+            } else {
+                alertasSection.classList.add('hidden');
+                alertasContainer.innerHTML = `
+                    <div class="text-center py-4">
+                        <p class="text-gray-500">✅ Todos os itens estão com estoque adequado</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Navigation
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-btn, .nav-btn-mobile').forEach(btn => {
+                btn.classList.remove('text-marrom', 'font-bold');
+                btn.classList.add('text-marrom/70');
+            });
+            
+            const activeBtn = document.querySelector(`.nav-btn[onclick*="${sectionName}"]`) || document.querySelector(`.nav-btn-mobile[onclick*="${sectionName}"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-marrom/70');
+                activeBtn.classList.add('text-marrom', 'font-bold');
+            }
+
+            if (sectionName === 'estoque') {
+                aplicarFiltros();
+            } else if (sectionName === 'pedidos') {
+                renderizarCards();
+            } else if (sectionName === 'financeiro') {
+                // Garante que os filtros de mês/ano estejam preenchidos antes de atualizar a lista de despesas
+                preencherFiltrosMesAno();
+                atualizarListaReceitas(); // Atualiza receitas com os filtros
+                atualizarListaDespesas();
+            }
+            atualizarDashboard(); // Sempre atualiza o dashboard ao mudar de seção
+        }
+
+        // Finance tabs
+        function showFinanceTab(tabName) {
+            document.querySelectorAll('.finance-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            document.querySelectorAll('.finance-tab').forEach(tab => {
+                tab.classList.remove('border-marrom', 'text-marrom');
+                tab.classList.add('border-transparent', 'text-gray-500');
+            });
+            
+            const activeTabBtn = document.querySelector(`.finance-tab[onclick*="${tabName}"]`);
+            if (activeTabBtn) {
+                activeTabBtn.classList.remove('border-transparent', 'text-gray-500');
+                activeTabBtn.classList.add('border-marrom', 'text-marrom');
+            }
+            // Se a aba de despesas for selecionada, atualiza a lista
+            if (tabName === 'despesas') {
+                atualizarListaDespesas();
+            } else if (tabName === 'receitas') { // Adicionado para receitas
+                atualizarListaReceitas();
+            }
+        }
+
+        // Modal functions
+        function showModal(modalName) {
+            document.getElementById('modal-overlay').classList.remove('hidden');
+            document.getElementById(modalName).classList.remove('hidden');
+            
+            if (modalName === 'novo-pedido') {
+                document.getElementById('novo-imagem-upload').value = '';
+                document.getElementById('novo-imagem-preview').src = '#';
+                document.getElementById('novo-imagem-preview-container').classList.add('hidden');
+                currentImageBase64 = '';
+                // Limpar campos do novo pedido
+                document.getElementById('novo-cliente').value = '';
+                document.getElementById('novo-telefone').value = '';
+                
+                document.getElementById('novo-data-entrega').value = '';
+                document.getElementById('novo-produto').value = '';
+                document.getElementById('novo-quantidade').value = '';
+                document.getElementById('novo-valor').value = '';
+                document.getElementById('novo-observacoes').value = '';
+
+            } else if (modalName === 'novo-item') {
+                document.querySelectorAll('#novo-item input, #novo-item select, #novo-item textarea').forEach(input => {
+                    input.value = '';
+                });
+            } else if (modalName === 'adicionar-quantidade') {
+                // Preenche o preço unitário da compra com o preço atual do item, se existir
+                if (itemAtual && itemAtual.preco) {
+                    document.getElementById('adicionar-preco-unitario-input').value = itemAtual.preco;
+                } else {
+                    document.getElementById('adicionar-preco-unitario-input').value = '';
+                }
+            }
+        }
+
+        function hideModal() {
+            document.getElementById('modal-overlay').classList.add('hidden');
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.add('hidden');
+            });
+            
+            // Não limpar itemAtual e pedidoAtual aqui para preservar nas transições de modais
+        }
+
+        // FUNÇÃO PARA OBTER CLASSE DE BORDA BASEADA NO STATUS DO PEDIDO
+        function getCardBorderClassPedido(status) {
+            switch(status) {
+                case 'Entregue':
+                    return 'card-border-green';
+                case 'Em Produção':
+                    return 'card-border-rosa';
+                case 'Cancelado':
+                    return 'card-border-red';
+                default:
+                    return 'card-border-nude';
+            }
+        }
+
+        // FUNÇÃO PARA OBTER CLASSE DE BORDA BASEADA NO STATUS DO ESTOQUE
+        function getCardBorderClassEstoque(statusInfo) {
+            switch(statusInfo.status) {
+                case 'critico':
+                    return 'card-border-red';
+                case 'baixo':
+                    return 'card-border-yellow';
+                case 'normal':
+                    return 'card-border-green';
+                default:
+                    return 'card-border-nude';
+            }
+        }
+
+        // Dados dos pedidos e estoque
+        let pedidos = [];
+        let estoque = [];
+        let pedidoAtual = null;
+        let itemAtual = null;
+        let currentImageBase64 = '';
+        let filtroCategoriaAtual = ''; // Variável para armazenar a categoria selecionada
+
+        // FUNÇÕES DE ADIÇÃO DE QUANTIDADE AO ESTOQUE - CORRIGIDAS
+        function adicionarQuantidadeItem(id) {
+            console.log('=== INICIANDO ADIÇÃO DE QUANTIDADE PARA ITEM ID:', id, '===');
+            
+            // Encontrar o item no estoque
+            const item = estoque.find(i => i.id === id);
+            if (!item) {
+                console.error('Item não encontrado para adição de quantidade!');
+                alert('Erro: Item não encontrado.');
+                return;
+            }
+
+            // Definir itemAtual e preencher o modal imediatamente
+            itemAtual = item;
+            console.log('Item encontrado para adição:', itemAtual);
+            
+            // Preencher informações do item diretamente
+            document.getElementById('adicionar-item-nome').textContent = itemAtual.nome;
+            document.getElementById('adicionar-quantidade-atual').textContent = `${itemAtual.quantidade} ${itemAtual.unidade}`;
+            
+            // Limpar campos
+            document.getElementById('adicionar-quantidade-input').value = '';
+            document.getElementById('adicionar-observacoes-input').value = '';
+            document.getElementById('preview-nova-quantidade').textContent = `${itemAtual.quantidade} ${itemAtual.unidade}`;
+            
+            // Configurar event listener para preview em tempo real
+            const quantidadeInput = document.getElementById('adicionar-quantidade-input');
+            // Remover listeners anteriores
+            quantidadeInput.removeEventListener('input', atualizarPreviewQuantidade);
+            // Adicionar novo listener
+            quantidadeInput.addEventListener('input', atualizarPreviewQuantidade);
+            
+            hideModal(); // Fecha o modal de detalhes
+            showModal('adicionar-quantidade'); // Abre o modal de adicionar quantidade
+            
+            console.log('=== MODAL DE ADIÇÃO CONFIGURADO E ABERTO ===');
+        }
+
+        function atualizarPreviewQuantidade() {
+            if (!itemAtual) {
+                console.log('itemAtual não está definido para preview');
+                return;
+            }
+            
+            const quantidadeAdicionar = parseFloat(document.getElementById('adicionar-quantidade-input').value) || 0;
+            const quantidadeAtual = parseFloat(itemAtual.quantidade) || 0;
+            const novaQuantidade = quantidadeAtual + quantidadeAdicionar;
+            
+            document.getElementById('preview-nova-quantidade').textContent = `${novaQuantidade} ${itemAtual.unidade}`;
+            console.log(`Preview atualizado: ${quantidadeAtual} + ${quantidadeAdicionar} = ${novaQuantidade} ${itemAtual.unidade}`);
+        }
+
+        function confirmarAdicaoQuantidade() {
+            console.log('=== CONFIRMANDO ADIÇÃO DE QUANTIDADE ===');
+            
+            if (!itemAtual) {
+                console.error('Nenhum item atual definido!');
+                alert('Erro: Nenhum item selecionado.');
+                return;
+            }
+
+            const quantidadeAdicionarStr = document.getElementById('adicionar-quantidade-input').value;
+            const precoUnitarioCompraStr = document.getElementById('adicionar-preco-unitario-input').value;
+            const observacoes = document.getElementById('adicionar-observacoes-input').value.trim();
+
+            console.log('Valores capturados:', {
+                quantidadeAdicionar: quantidadeAdicionarStr,
+                precoUnitarioCompra: precoUnitarioCompraStr,
+                observacoes: observacoes,
+                itemAtual: itemAtual.nome
+            });
+
+            // Validação
+            if (!quantidadeAdicionarStr || quantidadeAdicionarStr === '') {
+                alert('Por favor, informe a quantidade a ser adicionada!');
+                return;
+            }
+            const quantidadeAdicionar = parseFloat(quantidadeAdicionarStr);
+            if (isNaN(quantidadeAdicionar) || quantidadeAdicionar <= 0) {
+                alert('Por favor, informe uma quantidade válida maior que zero!');
+                return;
+            }
+
+            if (!precoUnitarioCompraStr || precoUnitarioCompraStr === '') {
+                alert('Por favor, informe o preço unitário da compra!');
+                return;
+            }
+            const precoUnitarioCompra = precoParaNumero(precoUnitarioCompraStr);
+            if (isNaN(precoUnitarioCompra) || precoUnitarioCompra < 0) {
+                alert('Por favor, informe um preço unitário de compra válido!');
+                return;
+            }
+
+            console.log(`Adicionando ${quantidadeAdicionar} ao item ${itemAtual.nome} com preço unitário ${precoUnitarioCompra}`);
+            
+            try {
+                const quantidadeAnterior = parseFloat(itemAtual.quantidade) || 0;
+                const novaQuantidade = quantidadeAnterior + quantidadeAdicionar;
+                
+                console.log(`Quantidade anterior: ${quantidadeAnterior}, Adicionando: ${quantidadeAdicionar}, Nova: ${novaQuantidade}`);
+                
+                // Atualizar quantidade do item
+                itemAtual.quantidade = novaQuantidade;
+                // Atualiza o preço do item para o último preço de compra (opcional, mas útil)
+                itemAtual.preco = numeroParaPreco(precoUnitarioCompra);
+
+                // Adicionar ao histórico de compras
+                if (!itemAtual.historicoCompras) {
+                    itemAtual.historicoCompras = [];
+                }
+                itemAtual.historicoCompras.push({
+                    data: new Date().toISOString().split('T')[0], // Data atual no formato YYYY-MM-DD
+                    quantidade: quantidadeAdicionar,
+                    precoUnitario: precoUnitarioCompra,
+                    observacao: observacoes
+                });
+                
+                console.log('Item atualizado:', itemAtual);
+                
+                // Salvar e atualizar interface
+                salvarDados();
+                aplicarFiltros();
+                atualizarDashboard(); // Atualiza dashboard com novas despesas
+                hideModal();
+                
+                alert(`✅ Quantidade adicionada com sucesso!\n\nItem: ${itemAtual.nome}\nQuantidade anterior: ${quantidadeAnterior} ${itemAtual.unidade}\nQuantidade adicionada: +${quantidadeAdicionar} ${itemAtual.unidade}\nNova quantidade: ${novaQuantidade} ${itemAtual.unidade}\nCusto da compra: ${numeroParaPreco(quantidadeAdicionar * precoUnitarioCompra)}`);
+                
+                // Limpar itemAtual após o sucesso
+                itemAtual = null;
+                
+                console.log('=== QUANTIDADE ADICIONADA COM SUCESSO ===');
+                
+            } catch (error) {
+                console.error('Erro ao adicionar quantidade:', error);
+                alert('Erro ao adicionar quantidade. Tente novamente.');
+            }
+        }
+
+        // FUNÇÕES DE ESTOQUE
+
+        function getStatusItem(item) {
+            const quantidade = parseFloat(item.quantidade);
+            const minimo = parseFloat(item.minimo);
+            const critico = parseFloat(item.critico);
+
+            if (!isNaN(critico) && quantidade <= critico) {
+                return { status: 'critico', class: 'bg-red-100 text-red-800', texto: 'Crítico' };
+            } else if (!isNaN(minimo) && quantidade <= minimo) {
+                return { status: 'baixo', class: 'bg-yellow-100 text-yellow-800', texto: 'Baixo' };
+            }
+            return { status: 'normal', class: 'bg-green-100 text-green-800', texto: 'Normal' };
+        }
+
+        // Função para selecionar categoria (atualizada para sidebar vertical)
+        function selecionarCategoria(categoria) {
+            filtroCategoriaAtual = categoria;
+            const buttons = document.querySelectorAll('.categoria-btn');
+            buttons.forEach(button => {
+                if (button.dataset.category === categoria) {
+                    button.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                    button.classList.add('bg-marrom', 'text-white');
+                } else {
+                    button.classList.remove('bg-marrom', 'text-white');
+                    button.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                }
+            });
+            aplicarFiltros();
+        }
+
+        // Função para aplicar filtros
+        function aplicarFiltros() {
+            const container = document.getElementById('estoque-cards-container');
+            const filtroStatus = document.getElementById('filtro-status').value;
+            const busca = document.getElementById('busca-item').value.toLowerCase();
+
+            let estoquesFiltrados = estoque.filter(item => {
+                const matchCategoria = !filtroCategoriaAtual || item.categoria === filtroCategoriaAtual;
+                const statusItem = getStatusItem(item);
+                const matchStatus = !filtroStatus || statusItem.status === filtroStatus;
+                const matchBusca = !busca || item.nome.toLowerCase().includes(busca) || (item.fornecedor && item.fornecedor.toLowerCase().includes(busca));
+                
+                return matchCategoria && matchStatus && matchBusca;
+            });
+
+            if (estoquesFiltrados.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500 text-lg">Nenhum item encontrado</p>
+                        <p class="text-400 text-sm">Tente ajustar os filtros ou adicione novos itens</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            estoquesFiltrados.forEach(item => {
+                const statusInfo = getStatusItem(item);
+                const borderClass = getCardBorderClassEstoque(statusInfo);
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-xl p-6 card-shadow hover-lift cursor-pointer transition-all duration-200 ${borderClass}`;
+                
+                card.innerHTML = `
+                    <div class="mb-4">
+                        <h3 class="font-semibold text-marrom mb-2 text-lg">${item.nome}</h3>
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full ${statusInfo.class}">${statusInfo.texto}</span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-600">Quantidade: <span class="font-medium">${item.quantidade} ${item.unidade}</span></p>
+                        <p class="text-sm text-gray-600 capitalize">Categoria: <span class="font-medium">${item.categoria}</span></p>
+                    </div>
+                    
+                    <div class="border-t pt-4">
+                        <div class="flex justify-between items-center">
+                            <button onclick="abrirDetalhesItem(${item.id})" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                📋 Ver Detalhes
+                            </button>
+                            <div class="flex space-x-2">
+                                <button onclick="adicionarQuantidadeItem(${item.id}); event.stopPropagation();" class="text-green-600 hover:text-green-800 text-sm" title="Adicionar Quantidade">
+                                    ➕
+                                </button>
+                                <button onclick="editarItemEstoque(${item.id}); event.stopPropagation();" class="text-gray-600 hover:text-gray-800 text-sm" title="Editar">
+                                    ✏️
+                                </button>
+                                <button onclick="confirmarRemocaoItem(${item.id}); event.stopPropagation();" class="text-red-600 hover:text-red-800 text-sm" title="Remover">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function abrirDetalhesItem(id) {
+            itemAtual = estoque.find(i => i.id === id);
+            if (!itemAtual) return;
+
+            // Preencher dados no modal
+            document.getElementById('item-nome-detalhe').textContent = itemAtual.nome;
+            document.getElementById('item-categoria-detalhe').textContent = itemAtual.categoria.replace('_', ' ');
+            document.getElementById('item-quantidade-detalhe').textContent = `${itemAtual.quantidade} ${itemAtual.unidade}`;
+            document.getElementById('item-unidade-detalhe').textContent = itemAtual.unidade;
+            document.getElementById('item-preco-detalhe').textContent = itemAtual.preco;
+            document.getElementById('item-fornecedor-detalhe').textContent = itemAtual.fornecedor || 'Não informado';
+            document.getElementById('item-minimo-detalhe').textContent = itemAtual.minimo ? `${itemAtual.minimo} ${itemAtual.unidade}` : 'Não definido';
+            document.getElementById('item-critico-detalhe').textContent = itemAtual.critico ? `${itemAtual.critico} ${itemAtual.unidade}` : 'Não definido';
+            document.getElementById('item-observacoes-detalhe').textContent = itemAtual.observacoes || 'Nenhuma observação';
+
+            // Atualizar status badge
+            const statusInfo = getStatusItem(itemAtual);
+            const statusBadge = document.getElementById('item-status-badge');
+            statusBadge.textContent = statusInfo.texto;
+            statusBadge.className = `px-3 py-1 text-xs font-semibold rounded-full ${statusInfo.class}`;
+
+            showModal('detalhes-item');
+        }
+
+        function salvarItem() {
+            console.log('=== INICIANDO SALVAMENTO DE ITEM ===');
+            
+            // Capturar os valores dos campos
+            const nome = document.getElementById('item-nome').value.trim();
+            const categoria = document.getElementById('item-categoria').value;
+            const quantidadeStr = document.getElementById('item-quantidade').value;
+            const unidade = document.getElementById('item-unidade').value;
+            const preco = document.getElementById('item-preco').value.trim();
+            const fornecedor = document.getElementById('item-fornecedor').value.trim();
+            const minimoStr = document.getElementById('item-minimo').value;
+            const criticoStr = document.getElementById('item-critico').value;
+            const observacoes = document.getElementById('item-observacoes').value.trim();
+
+            console.log('Valores capturados:', {
+                nome, categoria, quantidadeStr, unidade, preco, fornecedor, minimoStr, criticoStr, observacoes
+            });
+
+            // Validação melhorada
+            if (!nome) {
+                alert('Por favor, preencha o nome do item!');
+                return;
+            }
+
+            if (!categoria) {
+                alert('Por favor, selecione uma categoria!');
+                return;
+            }
+
+            if (!quantidadeStr || quantidadeStr === '') {
+                alert('Por favor, preencha a quantidade!');
+                return;
+            }
+
+            const quantidade = parseFloat(quantidadeStr);
+            if (isNaN(quantidade) || quantidade < 0) {
+                alert('Por favor, insira uma quantidade válida!');
+                return;
+            }
+
+            if (!unidade) {
+                alert('Por favor, selecione uma unidade!');
+                return;
+            }
+
+            console.log('Validação passou! Criando item...');
+
+            // Conversão dos valores opcionais
+            const minimo = minimoStr && minimoStr !== '' ? parseFloat(minimoStr) : 0;
+            const critico = criticoStr && criticoStr !== '' ? parseFloat(criticoStr) : 0;
+
+            const novoItem = {
+                id: estoque.length > 0 ? Math.max(...estoque.map(i => i.id)) + 1 : 1,
+                nome,
+                categoria,
+                quantidade,
+                unidade,
+                preco: preco || 'R$ 0,00',
+                fornecedor: fornecedor || 'Não informado',
+                minimo: isNaN(minimo) ? 0 : minimo,
+                critico: isNaN(critico) ? 0 : critico,
+                observacoes: observacoes || '',
+                historicoCompras: [] // Inicializa o histórico de compras
+            };
+
+            // Adiciona a quantidade inicial ao histórico de compras
+            if (quantidade > 0 && preco) {
+                novoItem.historicoCompras.push({
+                    data: new Date().toISOString().split('T')[0],
+                    quantidade: quantidade,
+                    precoUnitario: precoParaNumero(preco),
+                    observacao: 'Estoque inicial (cadastro)'
+                });
+            }
+
+            console.log('Novo item criado:', novoItem);
+
+            try {
+                estoque.push(novoItem);
+                salvarDados();
+                aplicarFiltros();
+                atualizarDashboard(); // Atualiza dashboard com novas despesas
+                hideModal();
+                
+                // Limpar variáveis
+                itemAtual = null;
+                
+                alert('Item adicionado com sucesso!');
+                console.log('=== ITEM SALVO COM SUCESSO ===');
+            } catch (error) {
+                console.error('Erro ao salvar item:', error);
+                alert('Erro ao salvar o item. Tente novamente.');
+            }
+        }
+
+        function editarItemEstoque(id) {
+            console.log('=== INICIANDO EDIÇÃO DO ITEM ID:', id, '===');
+            
+            itemAtual = estoque.find(i => i.id === id);
+            if (!itemAtual) {
+                console.error('Item não encontrado para edição!');
+                return;
+            }
+
+            console.log('Item atual encontrado:', itemAtual);
+
+            // Preencher todos os campos do modal de edição
+            document.getElementById('edit-item-nome').value = itemAtual.nome || '';
+            document.getElementById('edit-item-categoria').value = itemAtual.categoria || '';
+            document.getElementById('edit-item-quantidade').value = itemAtual.quantidade || '';
+            document.getElementById('edit-item-unidade').value = itemAtual.unidade || '';
+            document.getElementById('edit-item-preco').value = itemAtual.preco || '';
+            document.getElementById('edit-item-fornecedor').value = itemAtual.fornecedor || '';
+            document.getElementById('edit-item-minimo').value = itemAtual.minimo || '';
+            document.getElementById('edit-item-critico').value = itemAtual.critico || '';
+            document.getElementById('edit-item-observacoes').value = itemAtual.observacoes || '';
+
+            console.log('Campos preenchidos. Abrindo modal de edição...');
+
+            hideModal(); // Fecha qualquer modal aberto (como detalhes)
+            showModal('editar-item'); // Abre o modal de edição
+
+            console.log('=== MODAL DE EDIÇÃO ABERTO ===');
+        }
+
+        function salvarEdicaoItem() {
+            console.log('=== INICIANDO SALVAMENTO DA EDIÇÃO DE ITEM ===');
+            
+            if (!itemAtual) {
+                console.error('Nenhum item atual definido para edição!');
+                alert('Erro: Nenhum item selecionado para edição.');
+                return;
+            }
+
+            console.log('Item atual sendo editado:', itemAtual);
+            
+            // Capturar os valores dos campos de edição
+            const nome = document.getElementById('edit-item-nome').value.trim();
+            const categoria = document.getElementById('edit-item-categoria').value;
+            const quantidadeStr = document.getElementById('edit-item-quantidade').value;
+            const unidade = document.getElementById('edit-item-unidade').value;
+            const preco = document.getElementById('edit-item-preco').value.trim();
+            const fornecedor = document.getElementById('edit-item-fornecedor').value.trim();
+            const minimoStr = document.getElementById('edit-item-minimo').value;
+            const criticoStr = document.getElementById('edit-item-critico').value;
+            const observacoes = document.getElementById('edit-item-observacoes').value.trim();
+
+            console.log('Novos valores capturados:', {
+                nome, categoria, quantidadeStr, unidade, preco, fornecedor, minimoStr, criticoStr, observacoes
+            });
+
+            // Validação
+            if (!nome) {
+                alert('Por favor, preencha o nome do item!');
+                return;
+            }
+
+            if (!categoria) {
+                alert('Por favor, selecione uma categoria!');
+                return;
+            }
+
+            if (!quantidadeStr || quantidadeStr === '') {
+                alert('Por favor, preencha a quantidade!');
+                return;
+            }
+
+            const quantidade = parseFloat(quantidadeStr);
+            if (isNaN(quantidade) || quantidade < 0) {
+                alert('Por favor, insira uma quantidade válida!');
+                return;
+            }
+
+            if (!unidade) {
+                alert('Por favor, selecione uma unidade!');
+                return;
+            }
+
+            console.log('Validação passou! Atualizando item...');
+
+            // Conversão dos valores opcionais
+            const minimo = minimoStr && minimoStr !== '' ? parseFloat(minimoStr) : 0;
+            const critico = criticoStr && criticoStr !== '' ? parseFloat(criticoStr) : 0;
+
+            try {
+                // Atualizar o item
+                itemAtual.nome = nome;
+                itemAtual.categoria = categoria;
+                itemAtual.quantidade = quantidade;
+                itemAtual.unidade = unidade;
+                itemAtual.preco = preco || 'R$ 0,00';
+                itemAtual.fornecedor = fornecedor || 'Não informado';
+                itemAtual.minimo = isNaN(minimo) ? 0 : minimo;
+                itemAtual.critico = isNaN(critico) ? 0 : critico;
+                itemAtual.observacoes = observacoes || '';
+
+                console.log('Item atualizado:', itemAtual);
+
+                // Salvar e atualizar interface
+                salvarDados();
+                aplicarFiltros();
+                atualizarDashboard(); // Atualiza dashboard com despesas modificadas
+                hideModal();
+                
+                // Limpar variável
+                itemAtual = null;
+                
+                alert('Item atualizado com sucesso!');
+                console.log('=== ITEM EDITADO COM SUCESSO ===');
+                
+            } catch (error) {
+                console.error('Erro ao editar item:', error);
+                alert('Erro ao editar o item. Tente novamente.');
+            }
+        }
+
+        // FUNÇÕES DE REMOÇÃO DE ITENS DE ESTOQUE - CORRIGIDAS
+        function confirmarRemocaoItem(id) {
+            console.log('=== CONFIRMANDO REMOÇÃO DE ITEM ID:', id, '===');
+            
+            itemAtual = estoque.find(i => i.id === id);
+            if (!itemAtual) {
+                console.error('Item não encontrado para remoção!');
+                alert('Erro: Item não encontrado.');
+                return;
+            }
+
+            console.log('Item encontrado para remoção:', itemAtual);
+            
+            hideModal(); // Fecha o modal de detalhes se estiver aberto
+            showModal('confirmar-remocao-item'); // Abre o modal de confirmação
+        }
+
+        function executarRemocaoItem() {
+            console.log('=== EXECUTANDO REMOÇÃO DE ITEM ===');
+            
+            if (!itemAtual) {
+                console.error('Nenhum item selecionado para remoção!');
+                alert('Erro: Nenhum item selecionado para remoção.');
+                return;
+            }
+
+            const nomeItem = itemAtual.nome;
+            console.log('Removendo item:', nomeItem);
+
+            try {
+                // Remover o item do array
+                estoque = estoque.filter(i => i.id !== itemAtual.id);
+                
+                console.log('Item removido do array. Novo array:', estoque);
+                
+                // Salvar dados e atualizar interface
+                salvarDados();
+                aplicarFiltros();
+                atualizarDashboard(); // Atualiza dashboard removendo despesas do item removido
+                hideModal();
+                
+                // Limpar variável
+                itemAtual = null;
+                
+                alert(`Item "${nomeItem}" removido com sucesso!`);
+                console.log('=== ITEM REMOVIDO COM SUCESSO ===');
+                
+            } catch (error) {
+                console.error('Erro ao remover item:', error);
+                alert('Erro ao remover o item. Tente novamente.');
+            }
+        }
+
+        // FUNÇÕES DE REMOÇÃO DE PEDIDOS - CORRIGIDAS
+        function confirmarRemocaoPedido() {
+            console.log('=== CONFIRMANDO REMOÇÃO DE PEDIDO ===');
+            
+            if (!pedidoAtual) {
+                console.error('Nenhum pedido atual definido para remoção!');
+                alert('Erro: Nenhum pedido selecionado para remoção.');
+                return;
+            }
+
+            console.log('Pedido encontrado para remoção:', pedidoAtual);
+            
+            hideModal(); // Fecha o modal de detalhes
+            showModal('confirmar-remocao-pedido'); // Abre o modal de confirmação
+        }
+
+        function executarRemocaoPedido() {
+            console.log('=== EXECUTANDO REMOÇÃO DE PEDIDO ===');
+            
+            if (!pedidoAtual) {
+                console.error('Nenhum pedido selecionado para remoção!');
+                alert('Erro: Nenhum pedido selecionado para remoção.');
+                return;
+            }
+
+            const nomeCliente = pedidoAtual.cliente;
+            const produto = pedidoAtual.produto;
+            console.log('Removendo pedido:', `${produto} - ${nomeCliente}`);
+
+            try {
+                // Remover o pedido do array
+                pedidos = pedidos.filter(p => p.id !== pedidoAtual.id);
+                
+                console.log('Pedido removido do array. Novo array:', pedidos);
+                
+                // Salvar dados e atualizar interface
+                salvarDados();
+                renderizarCards();
+                atualizarDashboard(); // Atualiza dashboard removendo receita do pedido removido
+                hideModal();
+                
+                // Limpar variável
+                pedidoAtual = null;
+                
+                alert(`Pedido "${produto} - ${nomeCliente}" removido com sucesso!`);
+                console.log('=== PEDIDO REMOVIDO COM SUCESSO ===');
+                
+            } catch (error) {
+                console.error('Erro ao remover pedido:', error);
+                alert('Erro ao remover o pedido. Tente novamente.');
+            }
+        }
+
+        // FUNÇÕES AUXILIARES PARA REMOÇÃO RÁPIDA (nos cards)
+        function removerPedidoRapido(id) {
+            console.log('=== REMOÇÃO RÁPIDA DE PEDIDO ID:', id, '===');
+            
+            pedidoAtual = pedidos.find(p => p.id === id);
+            if (!pedidoAtual) {
+                console.error('Pedido não encontrado para remoção rápida!');
+                alert('Erro: Pedido não encontrado.');
+                return;
+            }
+            
+            confirmarRemocaoPedido(); // Chama a função de confirmação
+        }
+
+        function removerItemRapido(id) {
+            console.log('=== REMOÇÃO RÁPIDA DE ITEM ID:', id, '===');
+            
+            itemAtual = estoque.find(i => i.id === id);
+            if (!itemAtual) {
+                console.error('Item não encontrado para remoção rápida!');
+                alert('Erro: Item não encontrado.');
+                return;
+            }
+            
+            confirmarRemocaoItem(id); // Chama a função de confirmação
+        }
+
+        // FUNÇÕES DE PEDIDOS (mantidas as originais)
+
+        document.getElementById('novo-imagem-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            console.log('Arquivo selecionado no novo pedido:', file);
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log('Imagem carregada no novo pedido, primeiros 50 caracteres:', e.target.result.substring(0, 50));
+                    document.getElementById('novo-imagem-preview').src = e.target.result;
+                    document.getElementById('novo-imagem-preview-container').classList.remove('hidden');
+                    currentImageBase64 = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('novo-imagem-preview').src = '#';
+                document.getElementById('novo-imagem-preview-container').classList.add('hidden');
+                currentImageBase64 = '';
+            }
+        });
+
+        document.getElementById('edit-imagem-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            console.log('Arquivo selecionado na edição:', file);
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log('Imagem carregada na edição, primeiros 50 caracteres:', e.target.result.substring(0, 50));
+                    document.getElementById('edit-imagem-preview').src = e.target.result;
+                    document.getElementById('edit-imagem-preview-container').classList.remove('hidden');
+                    currentImageBase64 = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('edit-imagem-preview').src = '#';
+                document.getElementById('edit-imagem-preview-container').classList.add('hidden');
+                currentImageBase64 = '';
+            }
+        });
+
+        function abrirPedido(id) {
+            console.log('=== ABRINDO PEDIDO ID:', id, '===');
+            pedidoAtual = pedidos.find(p => p.id === id);
+            if (!pedidoAtual) {
+                console.error('Pedido não encontrado!');
+                return;
+            }
+
+            console.log('Pedido encontrado:', pedidoAtual);
+            console.log('Imagem do pedido:', pedidoAtual.imagem);
+            console.log('Tamanho da string da imagem:', pedidoAtual.imagem ? pedidoAtual.imagem.length : 0);
+
+            document.getElementById('cliente-nome').textContent = pedidoAtual.cliente;
+            document.getElementById('cliente-telefone').textContent = pedidoAtual.telefone;
+            
+            const dataEntregaObj = new Date(pedidoAtual.dataEntrega + 'T00:00:00');
+            document.getElementById('data-entrega').textContent = dataEntregaObj.toLocaleDateString('pt-BR');
+            
+            document.getElementById('produto-nome').textContent = pedidoAtual.produto;
+            document.getElementById('produto-quantidade').textContent = pedidoAtual.quantidade;
+            document.getElementById('produto-valor').textContent = pedidoAtual.valor;
+            document.getElementById('pedido-observacoes').textContent = pedidoAtual.observacoes;
+
+            const statusBadge = document.getElementById('status-badge');
+            statusBadge.textContent = pedidoAtual.status;
+            
+            if (pedidoAtual.status === 'Entregue') {
+                statusBadge.className = 'px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800';
+            } else if (pedidoAtual.status === 'Em Produção') {
+                statusBadge.className = 'px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-800';
+            } else {
+                statusBadge.className = 'px-3 py-1 text-sm font-semibold rounded-full bg-gray-100 text-gray-800';
+            }
+
+            const detalhesImagemContainer = document.getElementById('detalhes-imagem-container');
+            const detalhesImagem = document.getElementById('detalhes-imagem');
+            
+            console.log('Container da imagem:', detalhesImagemContainer);
+            console.log('Elemento da imagem:', detalhesImagem);
+            console.log('Verificando se imagem existe...');
+            console.log('pedidoAtual.imagem:', !!pedidoAtual.imagem);
+            console.log('pedidoAtual.imagem !== "":', pedidoAtual.imagem !== '');
+            console.log('pedidoAtual.imagem !== "#":', pedidoAtual.imagem !== '#');
+            
+            if (pedidoAtual.imagem && pedidoAtual.imagem !== '' && pedidoAtual.imagem !== '#') {
+                console.log('✓ IMAGEM ENCONTRADA! Exibindo imagem...');
+                console.log('Primeiros 100 caracteres da imagem:', pedidoAtual.imagem.substring(0, 100));
+                detalhesImagem.src = pedidoAtual.imagem;
+                detalhesImagemContainer.classList.remove('hidden');
+                console.log('Container deve estar visível agora. Classes do container:', detalhesImagemContainer.className);
+            } else {
+                console.log('✗ IMAGEM NÃO ENCONTRADA. Ocultando container...');
+                detalhesImagem.src = '#';
+                detalhesImagemContainer.classList.add('hidden');
+                console.log('Container deve estar oculto. Classes do container:', detalhesImagemContainer.className);
+            }
+
+            console.log('=== ABRINDO MODAL ===');
+            showModal('detalhes-pedido');
+        }
+
+        function editarPedido() {
+            if (!pedidoAtual) return;
+            
+            document.getElementById('edit-cliente').value = pedidoAtual.cliente;
+            document.getElementById('edit-telefone').value = pedidoAtual.telefone;
+            
+            document.getElementById('edit-produto').value = pedidoAtual.produto;
+            document.getElementById('edit-quantidade').value = pedidoAtual.quantidade;
+            document.getElementById('edit-valor').value = pedidoAtual.valor;
+            document.getElementById('edit-observacoes').value = pedidoAtual.observacoes;
+            document.getElementById('edit-data').value = pedidoAtual.dataEntrega;
+            
+            const editImagemPreview = document.getElementById('edit-imagem-preview');
+            const editImagemPreviewContainer = document.getElementById('edit-imagem-preview-container');
+            if (pedidoAtual.imagem && pedidoAtual.imagem !== '#' && pedidoAtual.imagem !== '') {
+                editImagemPreview.src = pedidoAtual.imagem;
+                editImagemPreviewContainer.classList.remove('hidden');
+                currentImageBase64 = pedidoAtual.imagem; // Define a imagem atual para edição
+            } else {
+                editImagemPreview.src = '#';
+                editImagemPreviewContainer.classList.add('hidden');
+                currentImageBase64 = '';
+            }
+            document.getElementById('edit-imagem-upload').value = ''; // Limpa o input de arquivo
+
+            hideModal(); // Fecha o modal de detalhes antes de abrir o de edição
+            showModal('editar-pedido');
+        }
+
+        function salvarEdicao() {
+            if (!pedidoAtual) return;
+            
+            console.log('Salvando edição. Imagem atual:', currentImageBase64 ? currentImageBase64.substring(0, 50) : 'Nenhuma');
+            
+            pedidoAtual.cliente = document.getElementById('edit-cliente').value;
+            pedidoAtual.telefone = document.getElementById('edit-telefone').value;
+            
+            pedidoAtual.produto = document.getElementById('edit-produto').value;
+            pedidoAtual.quantidade = document.getElementById('edit-quantidade').value;
+            pedidoAtual.valor = document.getElementById('edit-valor').value;
+            pedidoAtual.observacoes = document.getElementById('edit-observacoes').value;
+            pedidoAtual.dataEntrega = document.getElementById('edit-data').value;
+            pedidoAtual.imagem = currentImageBase64; // Usa a imagem carregada ou a que já existia
+
+            console.log('Pedido atualizado:', pedidoAtual);
+
+            salvarDados();
+            renderizarCards();
+            atualizarDashboard(); // Atualiza o dashboard após a edição
+            
+            hideModal();
+            
+            // Limpar variáveis
+            pedidoAtual = null;
+            currentImageBase64 = '';
+            
+            alert('Pedido atualizado com sucesso!');
+        }
+
+        function finalizarPedido() {
+            if (!pedidoAtual) return;
+            
+            pedidoAtual.status = 'Entregue';
+            
+            salvarDados();
+            renderizarCards();
+            atualizarDashboard(); // Atualiza receitas quando pedido é finalizado
+            
+            const statusBadge = document.getElementById('status-badge');
+            if (statusBadge) {
+                statusBadge.textContent = 'Entregue';
+                statusBadge.className = 'px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800';
+            }
+            
+            hideModal();
+            
+            // Limpar variável
+            pedidoAtual = null;
+            
+            alert('✅ Pedido finalizado com sucesso!');
+        }
+
+        function renderizarCards() {
+            const container = document.getElementById('pedidos-container');
+            container.innerHTML = '';
+            
+            if (pedidos.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500 text-lg">Nenhum pedido encontrado</p>
+                        <p class="text-gray-400 text-sm">Clique em "+ Novo Pedido" para começar</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            pedidos.forEach(pedido => {
+                const borderClass = getCardBorderClassPedido(pedido.status);
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-xl p-6 card-shadow hover-lift cursor-pointer transition-all duration-200 ${borderClass}`;
+                
+                const statusClass = pedido.status === 'Entregue' 
+                    ? 'bg-green-100 text-green-800' 
+                    : pedido.status === 'Em Produção'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-red-100 text-red-800';
+
+                const dataEntregaObj = new Date(pedido.dataEntrega + 'T00:00:00');
+                const dataFormatada = dataEntregaObj.toLocaleDateString('pt-BR');
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-marrom mb-1">${pedido.cliente}</h3>
+                            <p class="text-sm text-gray-600">${pedido.telefone}</p>
+                        </div>
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full ${statusClass}">${pedido.status}</span>
+                    </div>
+                    
+                    ${pedido.imagem && pedido.imagem !== '#' && pedido.imagem !== '' ? `<div class="mb-4"><img src="${pedido.imagem}" alt="Imagem do Produto" class="w-full h-32 object-cover rounded-lg" onerror="this.style.display='none'"></div>` : ''}
+
+                    <div class="mb-4">
+                        <p class="text-gray-800 font-medium mb-1">${pedido.produto}</p>
+                        <p class="text-sm text-gray-600">Quantidade: ${pedido.quantidade}</p>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <p class="text-sm text-gray-600">Valor Total</p>
+                            <p class="text-xl font-bold text-green-600">${pedido.valor}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">Entrega</p>
+                            <p class="text-sm font-medium text-blue-600">${dataFormatada}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t pt-4">
+                        <div class="flex justify-between items-center">
+                            <button onclick="abrirPedido(${pedido.id})" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                📋 Ver Detalhes
+                            </button>
+                            <div class="flex space-x-2">
+                                <button onclick="editarPedidoRapido(${pedido.id}); event.stopPropagation();" class="text-gray-600 hover:text-gray-800 text-sm" title="Editar">
+                                    ✏️
+                                </button>
+                                <button onclick="finalizarPedidoRapido(${pedido.id}); event.stopPropagation();" class="text-green-600 hover:text-green-800 text-sm" title="Finalizar">
+                                    ✅
+                                </button>
+                                <button onclick="removerPedidoRapido(${pedido.id}); event.stopPropagation();" class="text-red-600 hover:text-red-800 text-sm" title="Remover">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function editarPedidoRapido(id) {
+            pedidoAtual = pedidos.find(p => p.id === id);
+            editarPedido();
+        }
+
+        function finalizarPedidoRapido(id) {
+            pedidoAtual = pedidos.find(p => p.id === id);
+            if (!pedidoAtual) return;
+            
+            if (pedidoAtual.status === 'Entregue') {
+                alert('Este pedido já foi finalizado!');
+                return;
+            }
+            
+            finalizarPedido(); // Chama a função completa de finalizar
+        }
+
+        function salvarPedido() {
+            console.log('=== SALVANDO PEDIDO ===');
+            console.log('Imagem para salvar:', currentImageBase64 ? currentImageBase64.substring(0, 50) : 'Nenhuma');
+            
+            const nomeCliente = document.getElementById('novo-cliente').value;
+            const telefone = document.getElementById('novo-telefone').value;
+            
+            const dataEntrega = document.getElementById('novo-data-entrega').value;
+            const produto = document.getElementById('novo-produto').value;
+            const quantidade = document.getElementById('novo-quantidade').value;
+            const valor = document.getElementById('novo-valor').value;
+            const observacoes = document.getElementById('novo-observacoes').value;
+            
+            if (!nomeCliente || !telefone || !produto || !valor || !dataEntrega) {
+                alert('Por favor, preencha todos os campos obrigatórios!');
+                return;
+            }
+            
+            const novoPedido = {
+                id: pedidos.length > 0 ? Math.max(...pedidos.map(p => p.id)) + 1 : 1,
+                cliente: nomeCliente,
+                telefone: telefone,
+                
+                produto: produto,
+                quantidade: quantidade || 1,
+                valor: valor,
+                dataEntrega: dataEntrega,
+                status: 'Em Produção',
+                observacoes: observacoes || 'Nenhuma observação',
+                imagem: currentImageBase64
+            };
+            
+            console.log('Novo pedido criado:', novoPedido);
+            
+            pedidos.push(novoPedido);
+            salvarDados();
+            renderizarCards();
+            atualizarDashboard();
+            
+            // Limpar campos do formulário
+            document.querySelectorAll('#novo-pedido input:not([type="file"]), #novo-pedido textarea').forEach(input => {
+                input.value = '';
+            });
+            document.getElementById('novo-imagem-upload').value = '';
+            document.getElementById('novo-imagem-preview').src = '#';
+            document.getElementById('novo-imagem-preview-container').classList.add('hidden');
+            currentImageBase64 = '';
+
+            hideModal();
+            alert('Pedido salvo com sucesso!');
+        }
+
+        // Close modal when clicking overlay
+        document.getElementById('modal-overlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideModal();
+            }
+        });
+
+        // Nova função para abrir o visualizador de imagem
+        function abrirImageViewer(src) {
+            document.getElementById('viewer-image').src = src;
+            hideModal(); // Esconde o modal atual (detalhes do pedido)
+            showModal('imagem-viewer-modal'); // Abre o novo modal de visualização
+        }
+
+        // Lógica do Modo Escuro
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+            
+            // Atualiza ícones para desktop
+            document.getElementById('sunIcon').classList.toggle('hidden', isDarkMode);
+            document.getElementById('moonIcon').classList.toggle('hidden', !isDarkMode);
+
+            // Atualiza ícones para mobile
+            document.getElementById('sunIconMobile').classList.toggle('hidden', isDarkMode);
+            document.getElementById('moonIconMobile').classList.toggle('hidden', !isDarkMode);
+        }
+
+        // Inicializa o modo escuro ao carregar a página
+        function initializeDarkMode() {
+            const savedMode = localStorage.getItem('darkMode');
+            if (savedMode === 'true') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('sunIcon').classList.add('hidden');
+                document.getElementById('moonIcon').classList.remove('hidden');
+                document.getElementById('sunIconMobile').classList.add('hidden');
+                document.getElementById('moonIconMobile').classList.remove('hidden');
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('sunIcon').classList.remove('hidden');
+                document.getElementById('moonIcon').classList.add('hidden');
+                document.getElementById('sunIconMobile').classList.remove('hidden');
+                document.getElementById('moonIconMobile').classList.add('hidden');
+            }
+        }
+
+        // Initialize dashboard as default view
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado');
+            
+            initializeDarkMode(); // Inicializa o modo escuro
+            
+            // Adiciona event listeners para os botões de modo escuro
+            document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+            document.getElementById('darkModeToggleMobile').addEventListener('click', toggleDarkMode);
+
+            carregarDados();
+            atualizarDashboard();
+            showSection('dashboard'); // Inicia na seção Dashboard
+            renderizarCards(); // Renderiza os cards de pedidos
+            aplicarFiltros(); // Renderiza os cards de estoque
+            selecionarCategoria(''); // Seleciona "Todas" por padrão ao carregar a página
+        });
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCkbHIax4pbJDemsGDjdPCDl2KCNFVLhVE",
+    authDomain: "duplagourmet25.firebaseapp.com",
+    projectId: "duplagourmet25",
+    storageBucket: "duplagourmet25.firebasestorage.app",
+    messagingSenderId: "992312401968",
+    appId: "1:992312401968:web:fb617ad41390e109f28df5"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+<script type="module">
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+  // Conecta ao Firestore
+  const db = getFirestore();
+
+  // Função para salvar dados
+  async function salvar() {
+    const texto = document.getElementById("texto").value;
+    if (texto.trim() === "") return;
+    await addDoc(collection(db, "itens"), { conteudo: texto });
+    document.getElementById("texto").value = "";
+    carregar(); // Atualiza a lista automaticamente
+  }
+
+  // Função para carregar dados
+  async function carregar() {
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+    const snapshot = await getDocs(collection(db, "itens"));
+    snapshot.forEach(doc => {
+      const li = document.createElement("li");
+      li.textContent = doc.data().conteudo;
+      lista.appendChild(li);
+    });
+  }
+
+  // Carrega dados ao abrir a página
+  window.onload = carregar;
+<input id="texto" placeholder="Digite algo...">
+<button onclick="salvar()">Salvar</button>
+<ul id="lista"></ul> 
+</script>
+</body>
+</html>
