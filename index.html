@@ -3127,13 +3127,10 @@
   };
 
   // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-
-<script type="module">
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+  const app =
 
   // Conecta ao Firestore
-  const db = getFirestore();
+  const db =
 
   // Função para salvar dados
   async function salvar() {
@@ -3161,6 +3158,51 @@
 <input id="texto" placeholder="Digite algo...">
 <button onclick="salvar()">Salvar</button>
 <ul id="lista"></ul> 
+
+<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"></script>
+<script>
+  // Código de inicialização do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyCkbHIax4pbJDemsGDjdPCDl2KCNFVLhVE",
+    authDomain: "duplagourmet25.firebaseapp.com",
+    projectId: "duplagourmet25",
+    storageBucket: "duplagourmet25.firebasestorage.app",
+    messagingSenderId: "992312401968",
+    appId: "1:992312401968:web:fb617ad41390e109f28df5"
+  };
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore(app);
+
+  // Funções de salvar e carregar dados
+  function salvar() {
+    const texto = document.getElementById("texto").value;
+    if (texto.trim() === "") return;
+    db.collection("itens").add({ conteudo: texto })
+      .then(() => {
+        document.getElementById("texto").value = "";
+        carregar();
+      })
+      .catch(error => console.error("Erro ao salvar: ", error));
+  }
+
+  function carregar() {
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+    db.collection("itens").get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          const li = document.createElement("li");
+          li.textContent = doc.data().conteudo;
+          lista.appendChild(li);
+        });
+      })
+      .catch(error => console.error("Erro ao carregar: ", error));
+  }
+
+  // Carregar dados ao iniciar
+  window.onload = carregar;
 </script>
+
 </body>
 </html>
