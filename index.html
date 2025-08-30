@@ -52,7 +52,43 @@
             --text-gray-dark: #1f2937; /* gray-900 */
             --text-gray-medium: #6b7280; /* gray-600 */
         }
+
+        body { 
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-secondary); /* Default text color */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
         
+        /* Apply variables to elements */
+        .bg-gray-50 { background-color: var(--bg-body); }
+        .bg-marrom { background-color: var(--bg-header); }
+        .text-white { color: var(--text-header); }
+        .text-white\/90 { color: var(--text-header-light); }
+        .bg-white { background-color: var(--bg-card); }
+        .text-marrom { color: var(--text-primary); }
+        .text-gray-600 { color: var(--text-secondary); }
+        .text-gray-500 { color: var(--text-light); }
+        .border-gray-200 { border-color: var(--border-color); }
+        .border-gray-300 { border-color: var(--input-border); }
+        .focus\:ring-rosa:focus { --tw-ring-color: var(--input-focus-ring); }
+        .bg-gray-50 { background-color: var(--bg-info-block); }
+        .bg-green-50 { background-color: var(--bg-green-light); }
+        .text-green-800 { color: var(--text-green-dark); }
+        .text-green-600 { color: var(--text-green-medium); }
+        .bg-red-50 { background-color: var(--bg-red-light); }
+        .text-red-800 { color: var(--text-red-dark); }
+        .text-red-500 { color: var(--text-red-medium); }
+        .bg-yellow-100 { background-color: var(--bg-yellow-light); }
+        .text-yellow-800 { color: var(--text-yellow-dark); }
+        .text-yellow-600 { color: var(--text-yellow-medium); }
+        .bg-blue-50 { background-color: var(--bg-blue-light); }
+        .text-blue-800 { color: var(--text-blue-medium); } /* Added for blue-800 */
+        .text-blue-600 { color: var(--text-blue-medium); }
+        .bg-gray-100 { background-color: var(--bg-gray-light); }
+        .text-gray-700 { color: var(--text-gray-medium); }
+        .text-gray-900 { color: var(--text-gray-dark); }
+
         /* Permitir seleção de texto apenas em inputs e textareas (MANTIDO) */
         input, textarea, select {
             -webkit-user-select: text;
@@ -183,7 +219,10 @@
                     <button onclick="showSection('pedidos')" class="nav-btn text-white hover:text-white/80 font-medium">Pedidos</button>
                     <button onclick="showSection('financeiro')" class="nav-btn text-white hover:text-white/80 font-medium">Financeiro</button>
                     <button onclick="showSection('estoque')" class="nav-btn text-white hover:text-white/80 font-medium">Estoque</button>
-                   
+                </nav>
+            </div>
+        </div>
+    </header>
 
     <!-- Mobile Menu -->
     <div class="md:hidden bg-white shadow-sm">
@@ -199,14 +238,6 @@
             </button>
             <button onclick="showSection('estoque')" class="nav-btn-mobile flex flex-col items-center text-marrom">
                 <span class="text-xs">Estoque</span>
-            </button>
-            <svg id="sunIconMobile" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h1M3 12h1m15.325-7.757l-.707.707M5.382 18.618l-.707.707M18.618 5.382l-.707-.707M5.382 5.382l-.707-.707M12 18a6 6 0 100-12 6 6 0 000 12z"></path>
-                </svg>
-                <svg id="moonIconMobile" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                </svg>
-                <span class="text-xs">Tema</span>
             </button>
         </div>
     </div>
@@ -2802,7 +2833,18 @@
             document.getElementById('viewer-image').src = src;
             hideModal(); // Esconde o modal atual (detalhes do pedido)
             showModal('imagem-viewer-modal'); // Abre o novo modal de visualização
-       
+        }
+
+        // Inicializa dashboard as default view
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado');
+            
+            carregarDados();
+            atualizarDashboard();
+            showSection('dashboard'); // Inicia na seção Dashboard
+            renderizarCards(); // Renderiza os cards de pedidos
+            aplicarFiltros(); // Renderiza os cards de estoque
+            selecionarCategoria(''); // Seleciona "Todas" por padrão ao carregar a página
         });
     </script>
 </body>
